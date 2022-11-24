@@ -18,6 +18,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
+    var myLat = 0.0
+    var myLong = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +30,44 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locationManager.startUpdatingLocation()
         ref = Database.database().reference()
     }
+    
+    func haversine(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
+    {
+        var lat1rad = lat1 * Double.pi/180
+        var lat2rad = lat2 * Double.pi/180
+        var long1rad = long1 * Double.pi/180
+        var long2rad = long2 * Double.pi/180
+        
+        var diffLat = lat1rad - lat2rad
+        var diffLong = long1rad - long2rad
+        
+        var calc = pow(sin(diffLat), 2) * pow(sin(diffLong),2) * cos(lat1rad) * cos(lat2rad)
+        var calc2 = asin(sqrt(calc))
+        //3958.756(miles) used since it is radius of earth
+        return 3958.756/calc2
+    }
 
+    @IBOutlet weak var display: UILabel!
     @IBOutlet weak var coordinates: UILabel!
     
+    @IBAction func download(_ sender: Any) {
+        //get one of the users from the database
+        var latData = 0.0
+        ref = Database.database().reference().child("users").child("0").child("locData").child("lat")
+        ref.getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print("issue")
+            return;
+          }
+            latData = snapshot?.value as? Double ?? -1;
+            self.display.text = String(latData)
+            
+        });
+        
+
+        //calculate distance between their location and ours and display it
+        //say whether it's within one mile or not
+    }
     
     func CoordToString(location : CLLocationCoordinate2D) -> String {
         return  String(format : "latitude : %f,\n longitude : %f", location.latitude, location.longitude)
@@ -42,12 +79,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
         let coordinations = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude,longitude: userLocation.coordinate.longitude)
         
+        myLat = Double(coordinations.latitude)
+        myLong = Double(coordinations.longitude)
+        
         coordinates.text = CoordToString(location: coordinations)
         
-        var dataDictionary: [String: Any] = [:]
-        dataDictionary["Lat"] = String(format : "%f", coordinations.latitude)
-        dataDictionary["Long"] =  String(format : "%f", coordinations.longitude)
-        ref.setValue(dataDictionary)
+        var locData: [String: Any] = [:]
+        locData["lat"] = String(format : "%f", coordinations.latitude)
+        locData["long"] =  String(format : "%f", coordinations.longitude)
+        var ageData: [String: Any] = [:]
+        ageData["age"] = 28
+        ageData["ageUpperRange"] = 35
+        ageData["ageLowerRange"] = 25
+        var gendData: [String: Any] = [:]
+        gendData["gender"] = "Female"
+        gendData["orientation"] = "Female"
+        var name = "Sydney"
+        let newUser = ["locData": locData,
+                       "gendData": gendData,
+                       "ageData": ageData,
+                       "name": name
+        ] as [String : Any]
+        let childUpdate = ["/users/1000": newUser]
+        ref.updateChildValues(childUpdate)
         
         
     }
