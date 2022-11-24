@@ -7,7 +7,6 @@ import math
 #for each dictionary generate random first name, random lat/long in dc area, userID, age, 
 
 # Data to be written
-users = []
 
 names = ["Michael", "Sarah", "Emily", "John", "Jay", "Cornelius", "Juan", "Rebecca", "Melissa", "Savannah", "Edison", "Liam", "Nelson", "Bob", "Lulu", "Jones", "Devin",
         "Nassar", "William", "Hubert", "Lisa", "Bart", "Robert", "River", "Lily", "Miranda", "Meg", "George", "Robert", "Miles", "Alex", "Noah", "Jack", "Jill", "Jose",
@@ -20,7 +19,13 @@ names = ["Michael", "Sarah", "Emily", "John", "Jay", "Cornelius", "Juan", "Rebec
         "Joy", "Augustine", "Mason", "Phillip", "Russell", "Philip", "Patricia", "Nancy", "Kathy", "Margaret", "Carol", "Michelle", "Donna","Kim", "Maithy", "Ara",
         "Donghyun", "Jeong", "Jun", "Carina", "Anushka", "Kashvi", "Kimaya", "Tara", "Tanvi", "Zara", "Sneha", "Andressa", "Edict", "Fernanda", "Kimi", "Mikki", 
         "Anthy", "Izabel", "Fernando", "Mareline", "Madeleine", "Marcos", "Rosa", "Viola", "North", "Snowy", "Paulina", "Tacito", "Claudia", "Cipriano", "Ignacio",
-        "Carmen", "Maple", "Elmer", "Clifford", "Clayton", "Leonardo", "Luan", "Sandile", "Lydia", "Amahle", "Annika", "Charlize", "Imka", "Nomusa", "Retha", "Unathi"]
+        "Carmen", "Maple", "Elmer", "Clifford", "Clayton", "Leonardo", "Luan", "Sandile", "Lydia", "Amahle", "Annika", "Charlize", "Imka", "Nomusa", "Retha", "Unathi",
+        "Coraline", "Regina", "Gardevoir", "Dream", "Marcille", "Izumi", "Sakura", "Elon Musk", "Io", "Ceres", "Ares", "Tokyo", "Florida", "Bell", "Gardenia", "Nile",
+        "Laura", "Laurie", "Lauren", "Jules", "Muriel", "Matilda", "Lovecraft", "Evony", "Sarah Jane", "Yvette", "Taylor Swift", "Sherlock Holmes", "Slim Shady",
+        "Forest", "Mercury", "Chloe", "Willow", "Stacy", "Benedict", "Evan", "Orpheus", "Pagi", "Pangia", "America", "Cupid", "Killian", "Ellis", "Elle", "Jumanji",
+        "Lizzie", "Saturn", "Hermes", "Aphrodite", "France", "Allay", "Moonlight", "Sunny", "Diana", "Katya", "Goncharov", "Martin", "Tony", "Ned", "Joffrey", "Daphne",
+        "Daenerys", "Jon", "Drogo", "Kitty", "Jamie", "Brienne", "Thaddeus", "Hamlet", "Shakespeare", "Katana", "Longsword Jones", "Walgreens", "Plaid", "Shrew", "Li",
+        "McKayla", "Julienne", "Halana", "Kirsten", "Pierre", "Mistletoe", "Cherry", "Iula", "Tulip", "Trellis", "Minfilia", "West", "Coach", "Caroline", "Janusz"]
 
 genderList = ["Female", "Male", "Nonbinary"]
 
@@ -56,15 +61,16 @@ def ageRangeFunc(age):
 
 # between 38.81 and 38.98 dc latitude
 # between -76.91 and -77.05 dc longitude
+users = {
+}
 
-for x in range(0, 10):
+for x in range(0, 1000):
     gender = random.choice(genderList)
     orientation = decideOrientation(gender)
     age = math.floor(random.uniform(18,45))
     ageRange = ageRangeFunc(age)
 
     dictionary = {
-        "userID": x,
         "name": random.choice(names)
     }
 
@@ -88,11 +94,13 @@ for x in range(0, 10):
     dictionary["ageData"] = ageDict
     dictionary["gendData"] = gendDict
 
-    users.append(dictionary)
+    users["%d"%x] = dictionary
 
+appUsers = {}
+appUsers["users"]=users
  
 # Serializing json
-json_object = json.dumps(users, indent=4)
+json_object = json.dumps(appUsers, indent=4)
  
 # Writing to sample.json
 with open("sample.json", "w") as outfile:
