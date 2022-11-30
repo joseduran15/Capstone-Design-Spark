@@ -33,6 +33,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     
     func haversine(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
     {
+        //probably gonna want to use a different formula my research is telling me haversine isn't the most accurate but ill have to work out how to do lamberts
         var lat1rad = lat1 * Double.pi/180
         var lat2rad = lat2 * Double.pi/180
         var long1rad = long1 * Double.pi/180
@@ -122,6 +123,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                        "name": name
         ] as [String : Any]
         let childUpdate = ["/users/1000": newUser]
+        ref = Database.database().reference()
         ref.updateChildValues(childUpdate)
         
         
