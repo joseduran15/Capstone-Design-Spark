@@ -49,21 +49,42 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var coordinates: UILabel!
+    @IBOutlet weak var displayTwo: UILabel!
+    @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
         //get one of the users from the database
-        var latData = 0.0
+        var latData1 = 0.0
+        var longData1 = 0.0
         ref = Database.database().reference().child("users").child("0").child("locData").child("lat")
         ref.getData(completion:  { error, snapshot in
           guard error == nil else {
             print("issue")
             return;
           }
-            latData = snapshot?.value as? Double ?? -1;
-            self.display.text = String(latData)
+            var latData = snapshot?.value as? Double ?? -1;
+            latData1 = latData
+            self.display.text = "other latitude: " + String(latData1)
+            
+        });
+        ref = Database.database().reference().child("users").child("0").child("locData").child("long")
+        ref.getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print("issue")
+            return;
+          }
+            var longData = snapshot?.value as? Double ?? -1;
+            longData1 = longData
+            self.displayTwo.text = "other longitude: " + String(longData1)
             
         });
         
+        
+        var distance = haversine(lat1: latData1, long1: longData1, lat2: myLat, long2: myLong)
+        print(myLat)
+        print(myLong)
+        
+        self.haversine.text = "distance between us: " + String(distance)
 
         //calculate distance between their location and ours and display it
         //say whether it's within one mile or not
