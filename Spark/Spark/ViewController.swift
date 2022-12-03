@@ -20,6 +20,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var ref: DatabaseReference!
     var myLat = 0.0
     var myLong = 0.0
+    var latData1 = 0.0
+    var longData1 = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,21 +33,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         ref = Database.database().reference()
     }
     
-    func haversine(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
+    func distanceCalc(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
     {
-        //probably gonna want to use a different formula my research is telling me haversine isn't the most accurate but ill have to work out how to do lamberts
-        var lat1rad = lat1 * Double.pi/180
-        var lat2rad = lat2 * Double.pi/180
-        var long1rad = long1 * Double.pi/180
-        var long2rad = long2 * Double.pi/180
-        
-        var diffLat = lat1rad - lat2rad
-        var diffLong = long1rad - long2rad
-        
-        var calc = pow(sin(diffLat), 2) * pow(sin(diffLong),2) * cos(lat1rad) * cos(lat2rad)
-        var calc2 = asin(sqrt(calc))
-        //3958.756(miles) used since it is radius of earth
-        return 3958.756/calc2
+        var lat1rad = lat1/(180/Double.pi)
+        var lat2rad = lat2/(180/Double.pi)
+        var long2rad = long2/(180/Double.pi)
+        var long1rad = long1/(180/Double.pi)
+        return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
     }
 
     @IBOutlet weak var display: UILabel!
@@ -55,8 +49,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     
     @IBAction func download(_ sender: Any) {
         //get one of the users from the database
-        var latData1 = 0.0
-        var longData1 = 0.0
         ref = Database.database().reference().child("users").child("0").child("locData").child("lat")
         ref.getData(completion:  { error, snapshot in
           guard error == nil else {
@@ -64,8 +56,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             return;
           }
             var latData = snapshot?.value as? Double ?? -1;
-            latData1 = latData
-            self.display.text = "other latitude: " + String(latData1)
+            self.latData1 = latData
+            self.display.text = "other latitude: " + String(self.latData1)
             
         });
         ref = Database.database().reference().child("users").child("0").child("locData").child("long")
@@ -75,20 +67,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             return;
           }
             var longData = snapshot?.value as? Double ?? -1;
-            longData1 = longData
-            self.displayTwo.text = "other longitude: " + String(longData1)
+            self.longData1 = longData
+            self.displayTwo.text = "other longitude: " + String(self.longData1)
             
         });
-        
-        
-        var distance = haversine(lat1: latData1, long1: longData1, lat2: myLat, long2: myLong)
-        print(myLat)
-        print(myLong)
-        
-        self.haversine.text = "distance between us: " + String(distance)
 
-        //calculate distance between their location and ours and display it
-        //say whether it's within one mile or not
     }
     
     func CoordToString(location : CLLocationCoordinate2D) -> String {
@@ -125,6 +108,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         let childUpdate = ["/users/1000": newUser]
         ref = Database.database().reference()
         ref.updateChildValues(childUpdate)
+        
+        var distance = distanceCalc(lat1: latData1, long1: longData1, lat2: myLat, long2: myLong)
+        
+        self.haversine.text = "distance between us: " + String(distance)
         
         
     }
