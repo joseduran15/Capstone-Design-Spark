@@ -16,10 +16,6 @@ import FirebaseDatabaseSwift
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
-    public class User{
-        
-    }
-    
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
     var myLat = 0.0
@@ -46,12 +42,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
     }
 
-    @IBOutlet weak var coordinates: UILabel!
     @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
         //get the first ten of the users from the database
-        for i in 0...9
+        for i in 0...1000
         {
             ref = Database.database().reference().child("users").child(String(i))
             ref.getData(completion:  { error, snapshot in
@@ -76,7 +71,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     }
     
     func CoordToString(location : CLLocationCoordinate2D) -> String {
-        return  String(format : "latitude : %f,\n longitude : %f", location.latitude, location.longitude)
+        return  String(format : "our latitude : %f,\n our longitude : %f", location.latitude, location.longitude)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -88,7 +83,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         myLat = Double(coordinations.latitude)
         myLong = Double(coordinations.longitude)
         
-        coordinates.text = CoordToString(location: coordinations)
+        
         
         var locData: [String: Any] = [:]
         locData["lat"] = String(format : "%f", coordinations.latitude)
