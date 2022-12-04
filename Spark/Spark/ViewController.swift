@@ -16,6 +16,10 @@ import FirebaseDatabaseSwift
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
+    public class User{
+        
+    }
+    
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
     var myLat = 0.0
@@ -42,35 +46,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
     }
 
-    @IBOutlet weak var display: UILabel!
     @IBOutlet weak var coordinates: UILabel!
-    @IBOutlet weak var displayTwo: UILabel!
     @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
-        //get one of the users from the database
-        ref = Database.database().reference().child("users").child("0").child("locData").child("lat")
-        ref.getData(completion:  { error, snapshot in
-          guard error == nil else {
-            print("issue")
-            return;
-          }
-            var latData = snapshot?.value as? Double ?? -1;
-            self.latData1 = latData
-            self.display.text = "other latitude: " + String(self.latData1)
-            
-        });
-        ref = Database.database().reference().child("users").child("0").child("locData").child("long")
-        ref.getData(completion:  { error, snapshot in
-          guard error == nil else {
-            print("issue")
-            return;
-          }
-            var longData = snapshot?.value as? Double ?? -1;
-            self.longData1 = longData
-            self.displayTwo.text = "other longitude: " + String(self.longData1)
-            
-        });
+        //get the first ten of the users from the database
+        for i in 0...9
+        {
+            ref = Database.database().reference().child("users").child(String(i))
+            ref.getData(completion:  { error, snapshot in
+                guard error == nil else {
+                    print("issue")
+                    return;
+                }
+                var a: [String: Any] = [:]
+                a = snapshot?.value as! Dictionary<String, Any>
+                print(a["name"])
+                self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
+                self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
+                var distance = self.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: self.myLat, long2: self.myLong)
+                if(distance < 3){
+                    self.haversine.text = String(format: self.haversine.text! + "\n distance between us: %f",distance)
+                }
+                
+                
+            });
+        }
 
     }
     
@@ -108,10 +109,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         let childUpdate = ["/users/1000": newUser]
         ref = Database.database().reference()
         ref.updateChildValues(childUpdate)
-        
-        var distance = distanceCalc(lat1: latData1, long1: longData1, lat2: myLat, long2: myLong)
-        
-        self.haversine.text = "distance between us: " + String(distance)
         
         
     }
