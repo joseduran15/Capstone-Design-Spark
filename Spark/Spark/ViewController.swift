@@ -22,6 +22,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var myLong = 0.0
     var latData1 = 0.0
     var longData1 = 0.0
+    
+    //profile data
+    var myName = ""
+    var myAge = -1
+    var myGender = ""
+    var myOrientation = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,19 +89,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         myLat = Double(coordinations.latitude)
         myLong = Double(coordinations.longitude)
         
-        
-        
         var locData: [String: Any] = [:]
         locData["lat"] = String(format : "%f", coordinations.latitude)
         locData["long"] =  String(format : "%f", coordinations.longitude)
         var ageData: [String: Any] = [:]
-        ageData["age"] = 28
+        ageData["age"] = myAge
         ageData["ageUpperRange"] = 35
         ageData["ageLowerRange"] = 25
         var gendData: [String: Any] = [:]
-        gendData["gender"] = "Female"
-        gendData["orientation"] = "Female"
-        var name = "Sydney"
+        gendData["gender"] = myGender
+        gendData["orientation"] = myOrientation
+        var name = myName
         let newUser = ["locData": locData,
                        "gendData": gendData,
                        "ageData": ageData,
