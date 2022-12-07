@@ -1,14 +1,47 @@
 import MapKit
 import SwiftUI
+import Firebase
+import FirebaseAnalytics
+import FirebaseAnalyticsSwift
+
+
+
+//var userArr: [User] = []
+
+//class dataCatcher {
+//    func fetchUsers() -> Array<Identifiable> {
+//        var userArr: [User] = []
+//        Database.database().reference().child("users").queryLimited(toFirst: 100).observeSingleEvent(of: .value, with: { (snapshot) in
+//            if let dictionary = snapshot.value as? [String: AnyObject] {
+//                let users = User(name: dictionary["name"] as? String,
+//                                 age: dictionary["age"] as! Int,
+//                                 coordinate: CLLocationCoordinate2D(latitude: dictionary["lat"] as! Double, longitude: dictionary["long"] as! Double))
+//                userArr.append(users)
+//            }
+//        })
+//        return userArr
+//    }
+//}
 
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
     /* Variable region accounts for showing specific coordinate region within span, showcasing input coordinates */
+//    let annot = dataCatcher().fetchUsers()
+    
+    let annotationItems: [User] = [
+        User(name: "John", age:23, latitude: 38.92405294518131, longitude: -77.04560423055138),
+        User(name: "December", age:25, latitude: 38.87436928751545, longitude: -76.9372115402109),
+        User(name: "Sarah", age:43, latitude: 38.85453773417487, longitude: -76.94138278489106),
+    ]
+    
     var body: some View {
-        Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
-            .onAppear() {
-                viewModel.checkifLocationManagerIsEnabled()
-            }
+        Map(coordinateRegion: $viewModel.region,
+            showsUserLocation: true,
+            annotationItems: annotationItems) {place in
+            MapMarker(coordinate: place.coordinate)
+        }.onAppear() {
+            viewModel.checkifLocationManagerIsEnabled()
+        }
     }
 }
 
@@ -57,3 +90,4 @@ final class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDeleg
         checkLocationAuthorization()
     }
 }
+
