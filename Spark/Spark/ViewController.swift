@@ -16,6 +16,7 @@ import FirebaseDatabaseSwift
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
+    //location data
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
     var myLat = 0.0
@@ -33,14 +34,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        //location setup stuff
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        //database setup
         ref = Database.database().reference()
         welcome.text = String(format:"Welcome to Spark, \(myName)!")
     }
     
+    //calculates distance between two pairs of latitudes and longitudes
     func distanceCalc(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
     {
         var lat1rad = lat1/(180/Double.pi)
@@ -54,9 +58,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
-        //get the first ten of the users from the database
+        //get the first thousand users from the database
         for i in 0...1000
         {
+            //points reference to current user we want to get from database
             ref = Database.database().reference().child("users").child(String(i))
             ref.getData(completion:  { error, snapshot in
                 guard error == nil else {
@@ -64,13 +69,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                     return;
                 }
                 var a: [String: Any] = [:]
+                //turning datasnapshot returned from database into a dictionary
                 a = snapshot?.value as! Dictionary<String, Any>
+                //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
                 self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
                 self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+                //calculate distance between this user and other
                 var distance = self.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: self.myLat, long2: self.myLong)
-                if(distance < 3 && (self.myGender == otherOrien || otherOrien == "All") && (self.myOrientation == otherGen || self.myOrientation == "All")){
+                //checks if the distance is less than 2 miles and if the gender/orientation of this user and other user are compatible
+                if(distance < 2 && (self.myGender == otherOrien || otherOrien == "All") && (self.myOrientation == otherGen || self.myOrientation == "All")){
                     self.haversine.text = String(format: self.haversine.text! + "\n distance between you and \(a["name"] ?? "error") : %f",distance)
                 }
                 
@@ -80,35 +89,40 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
     }
     
-    func CoordToString(location : CLLocationCoordinate2D) -> String {
-        return  String(format : "our latitude : %f,\n our longitude : %f", location.latitude, location.longitude)
-    }
-    
+    //runs constantly to get user's updated location and put it in the database and also puts profile stuff from former view into database, in the future profile stuff will be in a different method to save calls to database but this is easiest for now
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
+        //gets this user's location
         let userLocation:CLLocation = locations[0] as CLLocation
 
+        //puts coordinates into usable format
         let coordinations = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude,longitude: userLocation.coordinate.longitude)
         
         myLat = Double(coordinations.latitude)
         myLong = Double(coordinations.longitude)
         
+        //putting our user's data into a dictionary format for the database
+        //first location data
         var locData: [String: Any] = [:]
         locData["lat"] = String(format : "%f", coordinations.latitude)
         locData["long"] =  String(format : "%f", coordinations.longitude)
+        //then age data
         var ageData: [String: Any] = [:]
         ageData["age"] = myAge
         ageData["ageUpperRange"] = 35
         ageData["ageLowerRange"] = 25
+        //then gender/orientation data
         var gendData: [String: Any] = [:]
         gendData["gender"] = myGender
         gendData["orientation"] = myOrientation
         var name = myName
+        //creating final dictionary
         let newUser = ["locData": locData,
                        "gendData": gendData,
                        "ageData": ageData,
                        "name": name
         ] as [String : Any]
+        //putting new user into database
         let childUpdate = ["/users/1000": newUser]
         ref = Database.database().reference()
         ref.updateChildValues(childUpdate)
