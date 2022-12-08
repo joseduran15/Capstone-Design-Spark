@@ -42,6 +42,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         //database setup
         ref = Database.database().reference()
         welcome.text = String(format:"Welcome to Spark, \(myName)!")
+        
+        var locations: [CLLocation] = []
+
+                // ...and fill it with CLLocation objects
+                locations.append(CLLocation(latitude: 48.1623, longitude: 11.5798))
+                locations.append(CLLocation(latitude: 48.1621, longitude: 11.5799))
+                locations.append(CLLocation(latitude: 48.1603, longitude: 11.5763))
+                locations.append(CLLocation(latitude: 48.1622, longitude: 11.5797))
+               
+                
+                let dbscan = DBSCAN(locations)
+                let (sequence, places) = dbscan.findCluster(eps: 75.0, minPts: 0)
+                
+                print(sequence)
+                print(places)
     }
     
     //calculates distance between two pairs of latitudes and longitudes
