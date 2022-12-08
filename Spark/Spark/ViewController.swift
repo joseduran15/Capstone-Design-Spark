@@ -28,6 +28,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var myAge = -1
     var myGender = ""
     var myOrientation = ""
+    var myUserID = -1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         ref = Database.database().reference()
+        welcome.text = String(format:"Welcome to Spark, \(myName)!")
     }
     
     func distanceCalc(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
@@ -48,6 +50,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
     }
 
+    @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
@@ -62,12 +65,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 }
                 var a: [String: Any] = [:]
                 a = snapshot?.value as! Dictionary<String, Any>
-                print(a["name"])
                 self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
                 self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
+                var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
+                var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
                 var distance = self.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: self.myLat, long2: self.myLong)
-                if(distance < 3){
-                    self.haversine.text = String(format: self.haversine.text! + "\n distance between us: %f",distance)
+                if(distance < 3 && (self.myGender == otherOrien || otherOrien == "All") && (self.myOrientation == otherGen || self.myOrientation == "All")){
+                    self.haversine.text = String(format: self.haversine.text! + "\n distance between you and \(a["name"] ?? "error") : %f",distance)
                 }
                 
                 
