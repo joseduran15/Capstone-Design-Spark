@@ -13,6 +13,7 @@ import FirebaseAnalytics
 import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import SwiftUI
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
@@ -30,10 +31,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var myGender = ""
     var myOrientation = ""
     var myUserID = -1
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        let contentView = UIHostingController(rootView: ContentView())
+        contentView.view.frame = view.bounds
+        view.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
         //location setup stuff
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
