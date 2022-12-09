@@ -38,7 +38,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         let contentView = UIHostingController(rootView: ContentView())
-        contentView.view.frame = view.bounds
+        //contentView.view.frame = view.bounds
+        contentView.view.frame = CGRectMake(20 , 170, self.view.frame.width * 0.9, self.view.frame.height * 0.3)
         view.addSubview(contentView.view)
         contentView.didMove(toParent: self)
         //location setup stuff
