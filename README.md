@@ -1,6 +1,4 @@
-# Capstone-Design-Spark
-
-<b><u>Spark Website</u></b>
+# Spark Website
 
 <i>Alex Kazaglis, Jose Duran, Jay Samaraweera</i>
 
@@ -19,14 +17,14 @@ Spark will be written in the Swift user interface through Xcode on Macs, Firebas
 
 In conclusion, Spark has massive potential to help people make romantic connections in real life instead of relying on traditional dating apps, while reducing much of the anxiety and even perceived danger that comes with trying to meet people in person. We hope you’ll see as much value in our project as we do, and support our efforts to help people to find happiness outside of their phones
 
-    1. Grøntvedt, T. V., Bendixen, M., Botnen, E. O., & Kennair, L. E. O. (2020). Hook, line and sinker: do tinder matches and meet ups lead to one-night stands?. Evolutionary Psychological Science, 6(2), 109-118.
+   <i>1. Grøntvedt, T. V., Bendixen, M., Botnen, E. O., & Kennair, L. E. O. (2020). Hook, line and sinker: do tinder matches and meet ups lead to one-night stands?. Evolutionary Psychological Science, 6(2), 109-118.</i>
 
 
 
-<b><u>Product Specifications</u></b>
+<b><u><h2>Product Specifications</h2></u></b>
 
 
-<b>User Stories:</b>
+<b><h3>User Stories:</h3></b>
 
 As a User, I want to be able to see a map of hotspots upon opening the app, so I can see whether there are a lot of people out tonight or not.
 
@@ -42,31 +40,31 @@ As a User, I want to be able to message people whose profiles I match with, so w
 
 As a User, I want my dynamic profile to automatically be deleted after 24 hours of inactivity, to preserve the in-the-moment nature of the app.
 
-<b>App Flow Diagram:</b>
+<b><h3>App Flow Diagram:</h3></b>
 
 ![Book logo](flow.png)
 
-<b>Launch and Dynamic Profile Screens:</b>
+<b><h3>Launch and Dynamic Profile Screens:</h3></b>
 
 ![Book logo](Launch.png)
 
-<b>Messaging:</b>
+<b><h3>Messaging:</h3></b>
 
 ![Book logo](messaging.png)
 
-<b>Homescreen Before and After Profile Registration:</b>
+<b><h3>Homescreen Before and After Profile Registration:</h3></b>
 
 ![Book logo](screens.png)
 
-<b>Architecture/System Diagrams: </b>
+<b><h3>Architecture/System Diagrams: </h3></b>
 
 ![Book logo](architecture.png)
 
 
 
-<b>External APIs and Frameworks</b>
+<b><h3>External APIs and Frameworks</h3></b>
 
-Firebase API
+<b>Firebase API</b>
 Goal:
 Store users and geolocal data in the form of coordinates
 Description:
@@ -76,19 +74,19 @@ READ: ref.getData()
 WRITE: ref.updateChildValues(childUpdate)
 
 
-CoreLocation Framework
+<b>CoreLocation Framework</b>
 Goal:
 Display and update user location on map
 Description:
 This framework is used in our Xcode project. It connects to the firebase database in which it receives and updates the user location on a real-time basis. The parameters of latitude and longitude are passed through functions like the CLLocationCoordinate function to display the user as a blue dot on MapKit.
 
-Xcode/Swift
+<b>Xcode/Swift</b>
 Goal:
 Develop the app in an iOS environment
 Description:
 Xcode is a development environment created by Apple for iOS development, and Swift is the language specifically for use with Xcode to create iOS apps. Xcode allows one to both implement Swift code and create a UI for the app. 
 
-<b>Algorithms</b>
+<b><h3>Algorithms</h3></b>
   DBSCAN
   Goal: Group users on a map to create heatmap/hotspots for other users to view areas of popularity in terms of their preferences.
 
