@@ -41,6 +41,8 @@ As a User, I want my dynamic profile to automatically be deleted after 24 hours 
 
 Flow Diagram:
 
+![Book logo](flow.png)
+
 Launch and Dynamic Profile Screens:
 
 Messaging:
@@ -51,6 +53,7 @@ Homescreen Before and After Profile Registration:
 
 Architecture/System Diagrams: 
 
+![Book logo](architecture.png)
 
 
 
