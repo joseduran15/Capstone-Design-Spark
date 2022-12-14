@@ -39,4 +39,54 @@ As a User, I want to be able to message people whose profiles I match with, so w
 
 As a User, I want my dynamic profile to automatically be deleted after 24 hours of inactivity, to preserve the in-the-moment nature of the app.
 
+Flow Diagram:
+
+Launch and Dynamic Profile Screens:
+
+Messaging:
+
+Homescreen Before and After Profile Registration:
+
 ![Book logo](screens.png)
+
+Architecture/System Diagrams: 
+
+
+
+
+External APIs and Frameworks
+
+Firebase API
+Goal:
+Store users and geolocal data in the form of coordinates
+Description:
+This API is used in the main Xcode file. It connects to the main algorithm (DBSCAN) functionality and is called when user locations are mapped. The parameters X,Y coordinates are retrieved via a call to the database.
+Endpoints Used:
+READ: ref.getData()
+WRITE: ref.updateChildValues(childUpdate)
+
+
+CoreLocation Framework
+Goal:
+Display and update user location on map
+Description:
+This framework is used in our Xcode project. It connects to the firebase database in which it receives and updates the user location on a real-time basis. The parameters of latitude and longitude are passed through functions like the CLLocationCoordinate function to display the user as a blue dot on MapKit.
+
+Xcode/Swift
+Goal:
+Develop the app in an iOS environment
+Description:
+Xcode is a development environment created by Apple for iOS development, and Swift is the language specifically for use with Xcode to create iOS apps. Xcode allows one to both implement Swift code and create a UI for the app. 
+
+Algorithms
+DBSCAN
+Goal: Group users on a map to create heatmap/hotspots for other users to view areas of popularity in terms of their preferences.
+
+Description: We are going to have a Swift implementation of the DBSCAN (Density-based Spatial of Applications with Noise) Clustering algorithm, where we will set up the Epsilon and MinPoints variables to our desired values for testing users’ locations to create clusters. Once this algorithm is called, it will iterate to go through every point on the grid (map) and determine possible clusters based on the specified parameters and which points will be disregarded as the noise, or points that will not be part of any usable cluster. 
+
+Epsilon variable: Radius of the point being tested in regard to its neighbors to see if other points are capable of being in the same cluster.
+
+MinPoints variable: The minimum numbers of points in the same epsilon range that will constitute the creation of a cluster.
+
+
+
