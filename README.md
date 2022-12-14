@@ -1,6 +1,6 @@
 # Spark Website
 
-###<i>Alex Kazaglis, Jose Duran, Jay Samaraweera</i>
+### <i>Alex Kazaglis, Jose Duran, Jay Samaraweera</i>
 
 
 Have you ever listlessly swiped through Tinder, hoping one of those many matches will message you back? Or gone to a bar and left after half an hour, feeling too awkward to approach anyone there? If so, you’re not alone. When using Tinder, only about 2% of matches tend to result in an in-person meetup [1], and everyone knows the anxiety of trying to approach someone attractive in-person. Clearly, dating needs innovation - and with our app Spark, we intend to deliver some.
@@ -21,10 +21,10 @@ In conclusion, Spark has massive potential to help people make romantic connecti
 
 
 
-##<b><u>Product Specifications</u></b>
+## <b><u>Product Specifications</u></b>
 
 
-###<b>User Stories:</b>
+### <b>User Stories:</b>
 
 As a User, I want to be able to see a map of hotspots upon opening the app, so I can see whether there are a lot of people out tonight or not.
 
@@ -40,29 +40,29 @@ As a User, I want to be able to message people whose profiles I match with, so w
 
 As a User, I want my dynamic profile to automatically be deleted after 24 hours of inactivity, to preserve the in-the-moment nature of the app.
 
-###<b>App Flow Diagram:</b>
+### <b>App Flow Diagram:</b>
 
 ![Book logo](flow.png)
 
-###<b>Launch and Dynamic Profile Screens:</b>
+### <b>Launch and Dynamic Profile Screens:</b>
 
 ![Book logo](Launch.png)
 
-###<b>Messaging:</b>
+### <b>Messaging:</b>
 
 ![Book logo](messaging.png)
 
-###<b>Homescreen Before and After Profile Registration:</b>
+### <b>Homescreen Before and After Profile Registration:</b>
 
 ![Book logo](screens.png)
 
-###<b>Architecture/System Diagrams: </b>
+### <b>Architecture/System Diagrams: </b>
 
 ![Book logo](architecture.png)
 
 
 
-###<b>External APIs and Frameworks<</b>
+### <b>External APIs and Frameworks<</b>
 
 <b>Firebase API</b>
 
@@ -89,7 +89,7 @@ Develop the app in an iOS environment
 Description:
 Xcode is a development environment created by Apple for iOS development, and Swift is the language specifically for use with Xcode to create iOS apps. Xcode allows one to both implement Swift code and create a UI for the app. 
 
-###<b>Algorithms</b>
+### <b>Algorithms</b>
 
  <b> DBSCAN</b>
   
