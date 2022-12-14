@@ -45,7 +45,11 @@ Flow Diagram:
 
 Launch and Dynamic Profile Screens:
 
+![Book logo](Launch.png)
+
 Messaging:
+
+![Book logo](messaging.png)
 
 Homescreen Before and After Profile Registration:
 
