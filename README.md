@@ -65,6 +65,7 @@ As a User, I want my dynamic profile to automatically be deleted after 24 hours 
 <b><h3>External APIs and Frameworks</h3></b>
 
 <b>Firebase API</b>
+
 Goal:
 Store users and geolocal data in the form of coordinates
 Description:
@@ -75,19 +76,23 @@ WRITE: ref.updateChildValues(childUpdate)
 
 
 <b>CoreLocation Framework</b>
+
 Goal:
 Display and update user location on map
 Description:
 This framework is used in our Xcode project. It connects to the firebase database in which it receives and updates the user location on a real-time basis. The parameters of latitude and longitude are passed through functions like the CLLocationCoordinate function to display the user as a blue dot on MapKit.
 
 <b>Xcode/Swift</b>
+
 Goal:
 Develop the app in an iOS environment
 Description:
 Xcode is a development environment created by Apple for iOS development, and Swift is the language specifically for use with Xcode to create iOS apps. Xcode allows one to both implement Swift code and create a UI for the app. 
 
 <b><h3>Algorithms</h3></b>
-  DBSCAN
+
+ <b> DBSCAN</b>
+  
   Goal: Group users on a map to create heatmap/hotspots for other users to view areas of popularity in terms of their preferences.
 
   Description: We are going to have a Swift implementation of the DBSCAN (Density-based Spatial of Applications with Noise) Clustering algorithm, where we will set up the  Epsilon and MinPoints variables to our desired values for testing users’ locations to create clusters. Once this algorithm is called, it will iterate to go through every point on the grid (map) and determine possible clusters based on the specified parameters and which points will be disregarded as the noise, or points that will not be part of any usable cluster. 
