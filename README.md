@@ -62,7 +62,7 @@ As a User, I want my dynamic profile to automatically be deleted after 24 hours 
 
 
 
-### <b>External APIs and Frameworks<</b>
+### <b>External APIs and Frameworks</b>
 
 <b>Firebase API</b>
 
