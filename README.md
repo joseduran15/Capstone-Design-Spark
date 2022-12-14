@@ -1,8 +1,8 @@
 # Capstone-Design-Spark
 
-<b>Spark Website</b>
+<b><u>Spark Website</u></b>
 
-Alex Kazaglis, Jose Duran, Jay Samaraweera
+<i>Alex Kazaglis, Jose Duran, Jay Samaraweera</i>
 
 
 Have you ever listlessly swiped through Tinder, hoping one of those many matches will message you back? Or gone to a bar and left after half an hour, feeling too awkward to approach anyone there? If so, you’re not alone. When using Tinder, only about 2% of matches tend to result in an in-person meetup [1], and everyone knows the anxiety of trying to approach someone attractive in-person. Clearly, dating needs innovation - and with our app Spark, we intend to deliver some.
@@ -14,16 +14,19 @@ Of course, hyperlocal matching won’t be the only feature helping to keep our u
 Spark is useful just simply for dating purposes, and we intend it to be used by young people who are looking for a casual date that may turn into something more. However, its concept has the potential to greatly impact the culture of dating itself. Currently, going out can be very stressful for women, as they end up constantly being hit on by men even if they’re just out to have fun with friends. Spark would enable those men to find women in the area broadcasting that they’re open to a relationship through the app (instead of bothering random girls in a club) - both helping the men to find the girl of their dreams, and helping women to have a much less stressful experience. Spark also has the potential to make life much easier for LGBTQ people who want to meet people in real life instead of just talking on dating apps. Many LGBTQ people are afraid to approach someone they find attractive in person, as there are very real fears of being insulted or even attacked for it. Through Spark, one could find someone they know shares their gender preferences through the app and then immediately go out for a drink, removing that danger and improving quality of life for LGBTQ people.
 
 Spark will be implemented with a hotspot algorithm that will be able to determine users’ locations and show other active users the current clumps of users that are out around DC. The functionality will depend on a large user count to create these hotspots based on their preferences time of the week. In addition to only allowing people to match on the basis of proximity (one mile), users will only be able to see the other profiles if they have created and updated their dynamic profile. This profile will consist of a picture taken that day and some simple questions to recommend hotspots for that given occasion. Another difference from other competitors is the messaging feature, since users will only be able to message for twenty minutes and then the match will disappear. 
-Spark will be written in the Swift user interface through Xcode on Macs, Firebase will be the database backend, Google maps SDK for IOS will be used to generate an updated map with the hotspots and popular locations, and Github will be utilized to collaborate with my other teammates to commit and check code as a collective. This application is realistic and do-able since there are many models of dating apps that our team could look at for inspiration and implementation. The development cost for this project is virtually none, since we can research Swift and IOS applications online and look at copies of other dating apps to see how they worked. Since there are thousands of open-source applications online, we do not have to pay for programs and any tutorials on creating our project.Spark would be very successful financially since we could partner with bars and nightclubs to promote their locations as part of our hotspots. 
+
+Spark will be written in the Swift user interface through Xcode on Macs, Firebase will be the database backend, Google maps SDK for IOS will be used to generate an updated map with the hotspots and popular locations, and Github will be utilized to collaborate with my other teammates to commit and check code as a collective. This application is realistic and do-able since there are many models of dating apps that our team could look at for inspiration and implementation. The development cost for this project is virtually none, since we can research Swift and IOS applications online and look at copies of other dating apps to see how they worked. Since there are thousands of open-source applications online, we do not have to pay for programs and any tutorials on creating our project. Spark would be very successful financially since we could partner with bars and nightclubs to promote their locations as part of our hotspots. 
+
 In conclusion, Spark has massive potential to help people make romantic connections in real life instead of relying on traditional dating apps, while reducing much of the anxiety and even perceived danger that comes with trying to meet people in person. We hope you’ll see as much value in our project as we do, and support our efforts to help people to find happiness outside of their phones
-Grøntvedt, T. V., Bendixen, M., Botnen, E. O., & Kennair, L. E. O. (2020). Hook, line and sinker: do tinder matches and meet ups lead to one-night stands?. Evolutionary Psychological Science, 6(2), 109-118.
+
+    1. Grøntvedt, T. V., Bendixen, M., Botnen, E. O., & Kennair, L. E. O. (2020). Hook, line and sinker: do tinder matches and meet ups lead to one-night stands?. Evolutionary Psychological Science, 6(2), 109-118.
 
 
 
-Product Specifications
+<b><u>Product Specifications</u></b>
 
 
-User Stories:
+<b>User Stories:</b>
 
 As a User, I want to be able to see a map of hotspots upon opening the app, so I can see whether there are a lot of people out tonight or not.
 
@@ -39,29 +42,29 @@ As a User, I want to be able to message people whose profiles I match with, so w
 
 As a User, I want my dynamic profile to automatically be deleted after 24 hours of inactivity, to preserve the in-the-moment nature of the app.
 
-Flow Diagram:
+<b>App Flow Diagram:</b>
 
 ![Book logo](flow.png)
 
-Launch and Dynamic Profile Screens:
+<b>Launch and Dynamic Profile Screens:</b>
 
 ![Book logo](Launch.png)
 
-Messaging:
+<b>Messaging:</b>
 
 ![Book logo](messaging.png)
 
-Homescreen Before and After Profile Registration:
+<b>Homescreen Before and After Profile Registration:</b>
 
 ![Book logo](screens.png)
 
-Architecture/System Diagrams: 
+<b>Architecture/System Diagrams: </b>
 
 ![Book logo](architecture.png)
 
 
 
-External APIs and Frameworks
+<b>External APIs and Frameworks</b>
 
 Firebase API
 Goal:
@@ -85,15 +88,15 @@ Develop the app in an iOS environment
 Description:
 Xcode is a development environment created by Apple for iOS development, and Swift is the language specifically for use with Xcode to create iOS apps. Xcode allows one to both implement Swift code and create a UI for the app. 
 
-Algorithms
-DBSCAN
-Goal: Group users on a map to create heatmap/hotspots for other users to view areas of popularity in terms of their preferences.
+<b>Algorithms</b>
+  DBSCAN
+  Goal: Group users on a map to create heatmap/hotspots for other users to view areas of popularity in terms of their preferences.
 
-Description: We are going to have a Swift implementation of the DBSCAN (Density-based Spatial of Applications with Noise) Clustering algorithm, where we will set up the Epsilon and MinPoints variables to our desired values for testing users’ locations to create clusters. Once this algorithm is called, it will iterate to go through every point on the grid (map) and determine possible clusters based on the specified parameters and which points will be disregarded as the noise, or points that will not be part of any usable cluster. 
+  Description: We are going to have a Swift implementation of the DBSCAN (Density-based Spatial of Applications with Noise) Clustering algorithm, where we will set up the  Epsilon and MinPoints variables to our desired values for testing users’ locations to create clusters. Once this algorithm is called, it will iterate to go through every point on the grid (map) and determine possible clusters based on the specified parameters and which points will be disregarded as the noise, or points that will not be part of any usable cluster. 
 
-Epsilon variable: Radius of the point being tested in regard to its neighbors to see if other points are capable of being in the same cluster.
+  Epsilon variable: Radius of the point being tested in regard to its neighbors to see if other points are capable of being in the same cluster.
 
-MinPoints variable: The minimum numbers of points in the same epsilon range that will constitute the creation of a cluster.
+  MinPoints variable: The minimum numbers of points in the same epsilon range that will constitute the creation of a cluster.
 
 
 
