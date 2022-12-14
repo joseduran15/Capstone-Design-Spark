@@ -1,6 +1,6 @@
 # Capstone-Design-Spark
 
-Spark Website
+<b>Spark Website</b>
 
 Alex Kazaglis, Jose Duran, Jay Samaraweera
 
