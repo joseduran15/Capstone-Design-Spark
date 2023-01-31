@@ -25,10 +25,15 @@ import MapKit
 
 struct User: Identifiable {
     let id = UUID()
-    let name: String?
-    let age: Int
-    let latitude: Double
-    let longitude: Double
+    var name: String? = nil
+    var age: Int = 0
+    var ageUpperRange: Int = 0
+    var ageLowerRange: Int = 0
+    var orientation: String? = nil
+    var gender: String? = nil
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+    
     
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)

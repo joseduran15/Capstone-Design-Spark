@@ -67,14 +67,14 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     //send data to next view controller on segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "toMatchScreen")
+        if(segue.identifier == "toMapScreen")
         {
             if let nextVC = segue.destination as? ViewController
             {
-                nextVC.myName = nameLabel.text ?? "default"
-                nextVC.myAge = Int(ageLabel.text ?? "-1") ?? -1
-                nextVC.myGender = genders[genderPicker.selectedRow(inComponent: 0)]
-                nextVC.myOrientation = orientations[orientationPicker.selectedRow(inComponent: 0)]
+                nextVC.me.name = nameLabel.text ?? "default"
+                nextVC.me.age = Int(ageLabel.text ?? "-1") ?? -1
+                nextVC.me.gender = genders[genderPicker.selectedRow(inComponent: 0)]
+                nextVC.me.orientation = orientations[orientationPicker.selectedRow(inComponent: 0)]
             }
         }
     }

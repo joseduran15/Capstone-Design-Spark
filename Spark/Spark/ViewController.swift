@@ -17,22 +17,32 @@ import SwiftUI
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
+    struct GlobalLoc{
+        static var myLat = 0.0
+        static var myLong = 0.0
+        
+        static func distanceCalc(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
+        {
+            var lat1rad = lat1/(180/Double.pi)
+            var lat2rad = lat2/(180/Double.pi)
+            var long2rad = long2/(180/Double.pi)
+            var long1rad = long1/(180/Double.pi)
+            return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
+        }
+    }
+    
     //location data
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
-    var myLat = 0.0
-    var myLong = 0.0
+    
     var latData1 = 0.0
     var longData1 = 0.0
     
-    //profile data
-    var myName = ""
-    var myAge = -1
-    var myGender = ""
-    var myOrientation = ""
-    var myUserID = -1
+    //global var to keep track of number of users in database
+    var userCount = 999
     
-    
+    //this profile's user data
+    var me = User(name: "", age: 0, ageUpperRange: 0, ageLowerRange: 0, orientation: "", gender: "", latitude: GlobalLoc.myLat, longitude: GlobalLoc.myLong)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +59,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locationManager.startUpdatingLocation()
         //database setup
         ref = Database.database().reference()
-        welcome.text = String(format:"Welcome to Spark, \(myName)!")
+        welcome.text = String(format:"Welcome to Spark, \(me.name)!")
+        childObserver()
         
         var locations: [CLLocation] = []
 
@@ -68,21 +79,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     }
     
     //calculates distance between two pairs of latitudes and longitudes
-    func distanceCalc(lat1: Double, long1: Double, lat2: Double, long2: Double) -> Double
-    {
-        var lat1rad = lat1/(180/Double.pi)
-        var lat2rad = lat2/(180/Double.pi)
-        var long2rad = long2/(180/Double.pi)
-        var long1rad = long1/(180/Double.pi)
-        return acos(sin(lat1rad)*sin(lat2rad)+cos(lat1rad)*cos(lat2rad)*cos(long2rad-long1rad)) * 3963
-    }
+    
 
     @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
         //get the first thousand users from the database
-        for i in 0...1000
+        //add a listener that will listen for changes in childcount in the database
+        
+        for i in 0...3
         {
             //points reference to current user we want to get from database
             ref = Database.database().reference().child("users").child(String(i))
@@ -97,17 +103,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
                 self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
                 self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
+                
+                //end here
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+                //print(a["name"])
+                //print(otherGen)
+                //print(otherOrien)
                 //calculate distance between this user and other
-                var distance = self.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: self.myLat, long2: self.myLong)
+                var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
                 //checks if the distance is less than 2 miles and if the gender/orientation of this user and other user are compatible
-                if(distance < 2 && (self.myGender == otherOrien || otherOrien == "All") && (self.myOrientation == otherGen || self.myOrientation == "All")){
+                if(distance < 2 && (self.me.gender == otherOrien || otherOrien == "All") && (self.me.orientation == otherGen || self.me.orientation == "All")){
                     self.haversine.text = String(format: self.haversine.text! + "\n distance between you and \(a["name"] ?? "error") : %f",distance)
                 }
                 
                 
             });
+            
         }
 
     }
@@ -121,8 +133,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         //puts coordinates into usable format
         let coordinations = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude,longitude: userLocation.coordinate.longitude)
         
-        myLat = Double(coordinations.latitude)
-        myLong = Double(coordinations.longitude)
+        GlobalLoc.myLat = Double(coordinations.latitude)
+        GlobalLoc.myLong = Double(coordinations.longitude)
         
         //putting our user's data into a dictionary format for the database
         //first location data
@@ -131,14 +143,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locData["long"] =  String(format : "%f", coordinations.longitude)
         //then age data
         var ageData: [String: Any] = [:]
-        ageData["age"] = myAge
+        ageData["age"] = me.age
         ageData["ageUpperRange"] = 35
         ageData["ageLowerRange"] = 25
         //then gender/orientation data
         var gendData: [String: Any] = [:]
-        gendData["gender"] = myGender
-        gendData["orientation"] = myOrientation
-        var name = myName
+        gendData["gender"] = me.gender
+        gendData["orientation"] = me.orientation
+        var name = me.name
         //creating final dictionary
         let newUser = ["locData": locData,
                        "gendData": gendData,
@@ -146,14 +158,40 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                        "name": name
         ] as [String : Any]
         //putting new user into database
-        let childUpdate = ["/users/1000": newUser]
+        var childUpdate = ["/users/1000": newUser]
         ref = Database.database().reference()
         ref.updateChildValues(childUpdate)
-        
-        
+        var childCounter: [String: Any] = [:]
+        childCounter["childCount"] = self.userCount + 1
+        ref.updateChildValues(childCounter)
     }
     
 
+    func childObserver()
+    {
+        let query = ref.child("childCount")
+        
+        query.observe(.childChanged, with: { snapshot in
+            
+            self.userCount = snapshot.value as! Int
+            print("AAAAAAAAAAAAAAAAAAAA")
+        })
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "toMatchScreen")
+        {
+            if let nextVC = segue.destination as? ViewController
+            {
+                nextVC.me.name = me.name
+                nextVC.me.age = me.age
+                nextVC.me.gender = me.gender
+                nextVC.me.orientation = me.orientation
+                nextVC.me.ageLowerRange = me.ageLowerRange
+                nextVC.me.ageUpperRange = me.ageUpperRange
+            }
+        }
+    }
 
 }
 
