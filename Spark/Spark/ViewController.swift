@@ -39,7 +39,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var longData1 = 0.0
     
     //global var to keep track of number of users in database
-    var userCount = 999
+    var userCount = 1000
     
     //this profile's user data
     var me = User(name: "", age: 0, ageUpperRange: 0, ageLowerRange: 0, orientation: "", gender: "", latitude: GlobalLoc.myLat, longitude: GlobalLoc.myLong)
@@ -47,20 +47,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        //map initialization
         let contentView = UIHostingController(rootView: ContentView())
-        //contentView.view.frame = view.bounds
         contentView.view.frame = CGRectMake(20 , 170, self.view.frame.width * 0.9, self.view.frame.height * 0.3)
         view.addSubview(contentView.view)
         contentView.didMove(toParent: self)
+        //database setup
+        ref = Database.database().reference()
+        profileDataIntoDatabase()
+        
         //location setup stuff
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        //database setup
-        ref = Database.database().reference()
+        
+        
         welcome.text = String(format:"Welcome to Spark, \(me.name)!")
-        childObserver()
+        //childObserver()
         
         var locations: [CLLocation] = []
 
@@ -88,7 +92,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         //get the first thousand users from the database
         //add a listener that will listen for changes in childcount in the database
         
-        for i in 0...3
+        for i in 0...20
         {
             //points reference to current user we want to get from database
             ref = Database.database().reference().child("users").child(String(i))
@@ -136,11 +140,38 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         GlobalLoc.myLat = Double(coordinations.latitude)
         GlobalLoc.myLong = Double(coordinations.longitude)
         
+
+        var reference =  Database.database().reference().child("users").child(me.id ?? "-1").child("locData")
+        
+        var lat: [String: Any] = [:]
+        lat["lat"] = GlobalLoc.myLat
+        reference.updateChildValues(lat)
+        
+        reference = Database.database().reference().child("users").child(me.id ?? "-1").child("locData")
+        var long: [String: Any] = [:]
+        long["long"] = GlobalLoc.myLong
+        reference.updateChildValues(long)
+    }
+    
+
+    func childObserver()
+    {
+        let query = ref.child("childCount")
+        
+        query.observe(.value, with: { snapshot in
+            
+            self.userCount = snapshot.value as! Int
+            print("AAAAAAAAAAAAAAAAAAAA")
+        })
+    }
+    
+    func profileDataIntoDatabase()
+    {
         //putting our user's data into a dictionary format for the database
         //first location data
         var locData: [String: Any] = [:]
-        locData["lat"] = String(format : "%f", coordinations.latitude)
-        locData["long"] =  String(format : "%f", coordinations.longitude)
+        locData["lat"] = String(format : "%f", GlobalLoc.myLat)
+        locData["long"] =  String(format : "%f", GlobalLoc.myLong)
         //then age data
         var ageData: [String: Any] = [:]
         ageData["age"] = me.age
@@ -158,24 +189,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                        "name": name
         ] as [String : Any]
         //putting new user into database
-        var childUpdate = ["/users/1000": newUser]
-        ref = Database.database().reference()
-        ref.updateChildValues(childUpdate)
+        var reference = Database.database().reference().child("users").childByAutoId()
+        reference.setValue(newUser)
+        let childautoID = reference.key
+        me.id = reference.key
+        
+        reference = Database.database().reference()
         var childCounter: [String: Any] = [:]
         childCounter["childCount"] = self.userCount + 1
-        ref.updateChildValues(childCounter)
-    }
-    
-
-    func childObserver()
-    {
-        let query = ref.child("childCount")
-        
-        query.observe(.childChanged, with: { snapshot in
-            
-            self.userCount = snapshot.value as! Int
-            print("AAAAAAAAAAAAAAAAAAAA")
-        })
+        reference.updateChildValues(childCounter)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

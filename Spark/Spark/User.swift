@@ -24,7 +24,7 @@ import MapKit
 //}
 
 struct User: Identifiable {
-    let id = UUID()
+    var id: String? = nil
     var name: String? = nil
     var age: Int = 0
     var ageUpperRange: Int = 0
