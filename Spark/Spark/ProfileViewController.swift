@@ -17,7 +17,7 @@ import FirebaseDatabaseSwift
 import SwiftUI
 import AVFoundation
 
-class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
+class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
    
     var uID = ""
@@ -122,7 +122,7 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     func presentCamera() {
         let photoPicker = UIImagePickerController()
         photoPicker.sourceType = .camera
-        photoPicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        photoPicker.delegate = self
     
         self.present(photoPicker, animated: true, completion: nil)
     }
@@ -142,6 +142,15 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         }))
     
         present(alert, animated: true, completion: nil)
+    }
+    
+    //this doesn't work the camera displays but this method never runs
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            imageDisplay.image = image
+        }
+        print("hi")
+        dismiss(animated: true, completion: nil)
     }
     
     
