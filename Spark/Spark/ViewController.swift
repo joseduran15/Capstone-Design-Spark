@@ -115,7 +115,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 print(self.me.gender)
             });
             
-            profileDataIntoDatabase()
+            //profileDataIntoDatabase()
             
             //location setup stuff
             locationManager.delegate = self
