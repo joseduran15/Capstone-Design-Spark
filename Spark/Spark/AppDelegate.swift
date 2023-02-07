@@ -12,6 +12,7 @@ import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 import SwiftUI
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,10 +24,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    lazy var coreDataStack: CoreDataStack = .init(modelName: "Profile")
+
+       static let sharedAppDelegate: AppDelegate = {
+           guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+               fatalError("Unexpected app delegate type, did it change? \(String(describing: UIApplication.shared.delegate))")
+           }
+           return delegate
+       }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        
         return true
     }
 

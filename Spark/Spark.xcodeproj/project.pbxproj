@@ -12,6 +12,8 @@
 		511D1DD02942A99700A27882 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCF2942A99700A27882 /* User.swift */; };
 		511D1DD22942A9D600A27882 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DD12942A9D600A27882 /* ContentView.swift */; };
 		511D1DD62985F77C00A27882 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DD52985F77C00A27882 /* MatchViewController.swift */; };
+		5183436F29917FEE001F72B3 /* Profile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */; };
+		5183437229918039001F72B3 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5183437129918039001F72B3 /* CoreDataStack.swift */; };
 		51E14B46290DB66F00D0AB48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B45290DB66F00D0AB48 /* AppDelegate.swift */; };
 		51E14B48290DB66F00D0AB48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */; };
 		51E14B4A290DB66F00D0AB48 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B49290DB66F00D0AB48 /* ViewController.swift */; };
@@ -53,6 +55,8 @@
 		511D1DCF2942A99700A27882 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		511D1DD12942A9D600A27882 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		511D1DD52985F77C00A27882 /* MatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
+		5183436E29917FEE001F72B3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		5183437129918039001F72B3 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		51E14B42290DB66F00D0AB48 /* Spark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E14B45290DB66F00D0AB48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5183437029918012001F72B3 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				5183437129918039001F72B3 /* CoreDataStack.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		51E14B39290DB66F00D0AB48 = {
 			isa = PBXGroup;
 			children = (
@@ -126,7 +138,9 @@
 				51E14B45290DB66F00D0AB48 /* AppDelegate.swift */,
 				51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */,
 				51E14B49290DB66F00D0AB48 /* ViewController.swift */,
+				5183437029918012001F72B3 /* CoreData */,
 				51E14B4B290DB66F00D0AB48 /* Main.storyboard */,
+				5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */,
 				511D1DD12942A9D600A27882 /* ContentView.swift */,
 				511D1DCF2942A99700A27882 /* User.swift */,
 				511D1DCD2942A68800A27882 /* DBSCAN.swift */,
@@ -311,6 +325,8 @@
 				51E14B46290DB66F00D0AB48 /* AppDelegate.swift in Sources */,
 				511D1DD22942A9D600A27882 /* ContentView.swift in Sources */,
 				511D1DD02942A99700A27882 /* User.swift in Sources */,
+				5183437229918039001F72B3 /* CoreDataStack.swift in Sources */,
+				5183436F29917FEE001F72B3 /* Profile.xcdatamodeld in Sources */,
 				511D1DCE2942A68800A27882 /* DBSCAN.swift in Sources */,
 				511D1DCC293D592F00A27882 /* ProfileViewController.swift in Sources */,
 				51E14B48290DB66F00D0AB48 /* SceneDelegate.swift in Sources */,
@@ -687,6 +703,19 @@
 			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5183436E29917FEE001F72B3 /* Model.xcdatamodel */,
+			);
+			currentVersion = 5183436E29917FEE001F72B3 /* Model.xcdatamodel */;
+			path = Profile.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 51E14B3A290DB66F00D0AB48 /* Project object */;
 }

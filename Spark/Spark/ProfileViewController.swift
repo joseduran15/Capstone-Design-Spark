@@ -7,9 +7,26 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 {
+   
+    
+        
+    @IBOutlet weak var ageLabel: UITextField!
+    @IBOutlet weak var nameLabel: UITextField!
+    @IBOutlet weak var genderPicker: UIPickerView!
+    @IBOutlet weak var orientationPicker: UIPickerView!
+    @IBAction func finishButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func clearCoreData(_ sender: Any) {
+        AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
+        print("ran")
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -39,6 +56,8 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("fpor teh love of god")
+        
         genders = ["Female", "Male", "Nonbinary"]
         orientations = ["Female", "Male", "All"]
         
@@ -47,17 +66,9 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         
         orientationPicker.delegate = self
         orientationPicker.dataSource = self
-    }
-    
         
-    @IBOutlet weak var nameLabel: UITextField!
-    @IBOutlet weak var ageLabel: UITextField!
-    @IBOutlet weak var genderPicker: UIPickerView!
-    @IBOutlet weak var orientationPicker: UIPickerView!
-    @IBAction func finishButton(_ sender: Any) {
         
     }
-    
     
     
     //make keyboard go away

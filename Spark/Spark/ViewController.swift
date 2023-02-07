@@ -14,6 +14,7 @@ import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 import SwiftUI
+import CoreData
 
 class ViewController: UIViewController, CLLocationManagerDelegate{
     
@@ -44,6 +45,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     //this profile's user data
     var me = User(name: "", age: 0, ageUpperRange: 0, ageLowerRange: 0, orientation: "", gender: "", latitude: GlobalLoc.myLat, longitude: GlobalLoc.myLong)
 
+    @IBOutlet weak var welcome: UILabel!
+    @IBOutlet weak var haversine: UILabel!
+    
+    @IBOutlet weak var transButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -54,17 +61,69 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         contentView.didMove(toParent: self)
         //database setup
         ref = Database.database().reference()
-        profileDataIntoDatabase()
         
-        //location setup stuff
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        var isEmpty: Bool {
+            do {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
+                let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+                let count  = try managedContext.count(for: request)
+                return count == 0
+            } catch {
+                return true
+            }
+        }
         
-        
-        welcome.text = String(format:"Welcome to Spark, \(me.name)!")
-        //childObserver()
+        if(isEmpty)
+        {
+            transButton.isEnabled = true
+            //deactivate the rest of this viewcontroller somehow
+        }
+        else
+        {
+            let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
+            request.returnsObjectsAsFaults = false
+            do {
+                let result = try managedContext.fetch(request)
+                for data in result as! [NSManagedObject]
+            {
+                me.id = data.value(forKey: "userID") as! String
+                print(data.value(forKey: "userID") as! String)
+              }
+
+                   } catch {
+
+                       print("Failed")
+            }
+            ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
+            ref.getData(completion:  {  error, snapshot in
+                guard error == nil else {
+                    print("issue")
+                    return;
+                }
+                var a: [String: Any] = [:]
+                //turning datasnapshot returned from database into a dictionary
+                a = snapshot?.value as! Dictionary<String, Any>
+                
+                self.me.gender = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
+                self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+                self.me.age = (a["ageData"] as? [String:Any])?["age"] as? Int ?? -1
+                self.me.name = a["name"] as? String ?? "error"
+                print(self.me.name)
+                print(self.me.age)
+                print(self.me.orientation)
+                print(self.me.gender)
+            });
+            
+            profileDataIntoDatabase()
+            
+            //location setup stuff
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+            welcome.text = String(format:"Welcome to Spark, \(me.name ?? "help")!")
+        }
         
         var locations: [CLLocation] = []
 
@@ -82,11 +141,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 print(places)
     }
     
-    //calculates distance between two pairs of latitudes and longitudes
+    @IBAction func clearCoreData(_ sender: Any) {
+        
+        AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
+        print("ran")
+        
+    }
     
-
-    @IBOutlet weak var welcome: UILabel!
-    @IBOutlet weak var haversine: UILabel!
     
     @IBAction func download(_ sender: Any) {
         //get the first thousand users from the database
@@ -193,6 +254,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         reference.setValue(newUser)
         let childautoID = reference.key
         me.id = reference.key
+        //saving userID to persistant storage so when the app is open or closed it will save the profile
+        let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+        let profile = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: managedContext)
+        profile.setValue(me.id, forKey: "userID")
+        do {
+            try managedContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
         
         reference = Database.database().reference()
         var childCounter: [String: Any] = [:]
