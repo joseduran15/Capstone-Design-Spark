@@ -6,16 +6,42 @@ import FirebaseAnalyticsSwift
 
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
-    /* Variable region accounts for showing specific coordinate region within span, showcasing input coordinates */
-//    let annot = dataCatcher().fetchUsers()
+/* Variable region accounts for showing specific coordinate region within span, showcasing input coordinates */
+    @State var annotationItems: [User] = []
     
-    let annotationItems: [User] = [
-        User(name: "John", age:23, latitude: 38.92405294518131, longitude: -77.04560423055138),
-        User(name: "December", age:25, latitude: 38.87436928751545, longitude: -76.9372115402109),
-        User(name: "Sarah", age:43, latitude: 38.85453773417487, longitude: -76.94138278489106),
-    ]
+    func plotUsers() {
+        for i in 0...10
+        {
+            var latData = 0.0
+            var longData = 0.0
+            var userName = ""
+            
+            var userAge = 0
+            var ref: DatabaseReference!
+            
+            ref = Database.database().reference().child("users").child(String(i))
+            ref.getData(completion:  { error, snapshot in
+                guard error == nil else {
+                    print("issue")
+                    return;
+                }
+                var a: [String: Any] = [:]
+                //turning datasnapshot returned from database into a dictionary
+                a = snapshot?.value as! Dictionary<String, Any>
+                //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
+                latData = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
+                longData = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
+                userName = (a["name"]) as! String
+                userAge = Int((a["age"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
+                print(latData)
+                annotationItems.append(User(name:userName,age: userAge,latitude: latData,longitude: longData))
+                        });
+        }
+    }
+    
     
     var body: some View {
+        let _ = self.plotUsers()
         Map(coordinateRegion: $viewModel.region,
             showsUserLocation: true,
             annotationItems: annotationItems) {place in

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31802EBF2993019C00C667E9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31802EBE2993019C00C667E9 /* GoogleService-Info.plist */; };
 		511D1DCC293D592F00A27882 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCB293D592F00A27882 /* ProfileViewController.swift */; };
 		511D1DCE2942A68800A27882 /* DBSCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCD2942A68800A27882 /* DBSCAN.swift */; };
 		511D1DD02942A99700A27882 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCF2942A99700A27882 /* User.swift */; };
@@ -23,9 +24,6 @@
 		51E14B5D290DB67100D0AB48 /* SparkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B5C290DB67100D0AB48 /* SparkTests.swift */; };
 		51E14B67290DB67100D0AB48 /* SparkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B66290DB67100D0AB48 /* SparkUITests.swift */; };
 		51E14B69290DB67100D0AB48 /* SparkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B68290DB67100D0AB48 /* SparkUITestsLaunchTests.swift */; };
-		51E14B7629189F0A00D0AB48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51E14B7529189F0A00D0AB48 /* GoogleService-Info.plist */; };
-		51E14B7729189F0A00D0AB48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51E14B7529189F0A00D0AB48 /* GoogleService-Info.plist */; };
-		51E14B7829189F0A00D0AB48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51E14B7529189F0A00D0AB48 /* GoogleService-Info.plist */; };
 		51E14B7B2918A10A00D0AB48 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 51E14B7A2918A10A00D0AB48 /* FirebaseDatabase */; };
 		51E14B7D2918A12400D0AB48 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51E14B7C2918A12400D0AB48 /* FirebaseDatabaseSwift */; };
 		51E14B7F2918A3B800D0AB48 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 51E14B7E2918A3B800D0AB48 /* FirebaseAnalyticsSwift */; };
@@ -50,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31802EBE2993019C00C667E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		31802EC02993019F00C667E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		511D1DCB293D592F00A27882 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		511D1DCD2942A68800A27882 /* DBSCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBSCAN.swift; sourceTree = "<group>"; };
 		511D1DCF2942A99700A27882 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -70,7 +70,6 @@
 		51E14B62290DB67100D0AB48 /* SparkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E14B66290DB67100D0AB48 /* SparkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkUITests.swift; sourceTree = "<group>"; };
 		51E14B68290DB67100D0AB48 /* SparkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		51E14B7529189F0A00D0AB48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +112,7 @@
 		51E14B39290DB66F00D0AB48 = {
 			isa = PBXGroup;
 			children = (
+				31802EBE2993019C00C667E9 /* GoogleService-Info.plist */,
 				51E14B44290DB66F00D0AB48 /* Spark */,
 				51E14B5B290DB67100D0AB48 /* SparkTests */,
 				51E14B65290DB67100D0AB48 /* SparkUITests */,
@@ -134,10 +134,10 @@
 		51E14B44290DB66F00D0AB48 /* Spark */ = {
 			isa = PBXGroup;
 			children = (
-				51E14B7529189F0A00D0AB48 /* GoogleService-Info.plist */,
 				51E14B45290DB66F00D0AB48 /* AppDelegate.swift */,
 				51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */,
 				51E14B49290DB66F00D0AB48 /* ViewController.swift */,
+				31802EC02993019F00C667E9 /* GoogleService-Info.plist */,
 				5183437029918012001F72B3 /* CoreData */,
 				51E14B4B290DB66F00D0AB48 /* Main.storyboard */,
 				5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */,
@@ -291,7 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51E14B52290DB67000D0AB48 /* LaunchScreen.storyboard in Resources */,
-				51E14B7629189F0A00D0AB48 /* GoogleService-Info.plist in Resources */,
+				31802EBF2993019C00C667E9 /* GoogleService-Info.plist in Resources */,
 				51E14B4F290DB67000D0AB48 /* Assets.xcassets in Resources */,
 				51E14B4D290DB66F00D0AB48 /* Main.storyboard in Resources */,
 			);
@@ -301,7 +301,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51E14B7729189F0A00D0AB48 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +308,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51E14B7829189F0A00D0AB48 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
