@@ -47,7 +47,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var haversine: UILabel!
-    
+    //ideally this button won't be necessary because you'll automatically go to the profile screen if you don't have an id in coredata but for some reason changing the root view controller programmatically is incredibly annoying so it's like this for now
     @IBOutlet weak var transButton: UIButton!
     
     
@@ -107,7 +107,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 
                 self.me.gender = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
-                self.me.age = (a["ageData"] as? [String:Any])?["age"] as? Int ?? -1
+                self.me.age = Int((a["ageData"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
                 self.me.name = a["name"] as? String ?? "error"
                 print(self.me.name)
                 print(self.me.age)
@@ -115,7 +115,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 print(self.me.gender)
             });
             
-            //profileDataIntoDatabase()
             
             //location setup stuff
             locationManager.delegate = self
@@ -151,7 +150,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     
     @IBAction func download(_ sender: Any) {
         //get the first thousand users from the database
-        //add a listener that will listen for changes in childcount in the database
         
         for i in 0...20
         {
@@ -168,13 +166,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
                 self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
                 self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
-                
-                //end here
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
-                //print(a["name"])
-                //print(otherGen)
-                //print(otherOrien)
                 //calculate distance between this user and other
                 var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
                 //checks if the distance is less than 2 miles and if the gender/orientation of this user and other user are compatible
@@ -214,61 +207,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         reference.updateChildValues(long)
     }
     
-
-    func childObserver()
-    {
-        let query = ref.child("childCount")
-        
-        query.observe(.value, with: { snapshot in
-            
-            self.userCount = snapshot.value as! Int
-            print("AAAAAAAAAAAAAAAAAAAA")
-        })
-    }
-    
-    func profileDataIntoDatabase()
-    {
-        //putting our user's data into a dictionary format for the database
-        //first location data
-        var locData: [String: Any] = [:]
-        locData["lat"] = String(format : "%f", GlobalLoc.myLat)
-        locData["long"] =  String(format : "%f", GlobalLoc.myLong)
-        //then age data
-        var ageData: [String: Any] = [:]
-        ageData["age"] = me.age
-        ageData["ageUpperRange"] = 35
-        ageData["ageLowerRange"] = 25
-        //then gender/orientation data
-        var gendData: [String: Any] = [:]
-        gendData["gender"] = me.gender
-        gendData["orientation"] = me.orientation
-        var name = me.name
-        //creating final dictionary
-        let newUser = ["locData": locData,
-                       "gendData": gendData,
-                       "ageData": ageData,
-                       "name": name
-        ] as [String : Any]
-        //putting new user into database
-        var reference = Database.database().reference().child("users").childByAutoId()
-        reference.setValue(newUser)
-        let childautoID = reference.key
-        me.id = reference.key
-        //saving userID to persistant storage so when the app is open or closed it will save the profile
-        let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
-        let profile = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: managedContext)
-        profile.setValue(me.id, forKey: "userID")
-        do {
-            try managedContext.save()
-        } catch {
-            fatalError("Failure to save context: \(error)")
-        }
-        
-        reference = Database.database().reference()
-        var childCounter: [String: Any] = [:]
-        childCounter["childCount"] = self.userCount + 1
-        reference.updateChildValues(childCounter)
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toMatchScreen")

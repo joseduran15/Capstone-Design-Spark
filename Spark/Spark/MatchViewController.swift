@@ -23,9 +23,15 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     var currDisplayed = 0
     var me = User()
     
+    //gonna change to storing all this stuff in coredata
     var liked: [Int] = []
     var unLiked: [Int] = []
     var notInRange: [Int] = []
+    
+    /*ideas for how to get compatible users from database
+    - sort database somehow and grab from a range (going to SUCK to keep the ranges updated so probably not practical)
+    - use the index grouping method from the firebase website: same level as users there's a gender and then an orientation and people's usernames are stored in their respective gender/orientation, and this could be expanded for interests too, then when looking for a potential match you look in the gender/orientation group https://firebase.google.com/docs/database/ios/structure-data#fanout
+    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +66,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             
             var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
             var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+            var otherName = a["name"]
             //calculate distance between this user and other
             var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
             //checks if the distance is less than 2 miles and if the gender/orientation of this user and other user are compatible
@@ -71,8 +78,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 self.notInRange.append(otherID)
             }*/
             
-            print("AADFLKASJDG")
-            self.display.text = otherGen
+            self.display.text = otherName as! String
             
             
         });

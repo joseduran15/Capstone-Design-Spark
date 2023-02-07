@@ -15,6 +15,7 @@ import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 import SwiftUI
+import AVFoundation
 
 class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 {
@@ -30,6 +31,8 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBAction func finishButton(_ sender: Any) {
         
     }
+    
+    @IBOutlet weak var imageDisplay: UIImageView!
     
     @IBAction func clearCoreData(_ sender: Any) {
         AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
@@ -76,8 +79,71 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         orientationPicker.delegate = self
         orientationPicker.dataSource = self
         
+        //download childcount from database and assign it to usercount
+        var reference = Database.database().reference()
+        reference.getData(completion:  {  error, snapshot in
+            guard error == nil else {
+                print("issue")
+                return;
+            }
+            
+            var a: [String: Any] = [:]
+            //turning datasnapshot returned from database into a dictionary
+            a = snapshot?.value as! Dictionary<String, Any>
+            
+            self.userCount = a["childCount"] as! Int
+            print(self.userCount)
+            
+        });
+        
         
     }
+    
+    @IBAction func selfie(_ sender: Any) {
+        
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        DispatchQueue.main.async {
+            
+            switch cameraAuthorizationStatus {
+            case .notDetermined: self.requestCameraPermission()
+            case .authorized: self.presentCamera()
+            case .restricted, .denied: self.alertCameraAccessNeeded()
+            }
+        }
+    }
+    
+    func requestCameraPermission() {
+       AVCaptureDevice.requestAccess(for: .video, completionHandler: {accessGranted in
+           guard accessGranted == true else { return }
+           self.presentCamera()
+       })
+    }
+    
+    func presentCamera() {
+        let photoPicker = UIImagePickerController()
+        photoPicker.sourceType = .camera
+        photoPicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
+    
+        self.present(photoPicker, animated: true, completion: nil)
+    }
+    
+    func alertCameraAccessNeeded() {
+        let settingsAppURL = URL(string: UIApplication.openSettingsURLString)!
+     
+         let alert = UIAlertController(
+             title: "Need Camera Access",
+             message: "Camera access is required to make full use of this app.",
+             preferredStyle: UIAlertController.Style.alert
+         )
+     
+       alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Allow Camera", style: .cancel, handler: { (alert) -> Void in
+            UIApplication.shared.open(settingsAppURL, options: [:], completionHandler: nil)
+        }))
+    
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     
     //make keyboard go away
@@ -152,6 +218,7 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
                 nextVC.me.gender = genders[genderPicker.selectedRow(inComponent: 0)]
                 nextVC.me.orientation = orientations[orientationPicker.selectedRow(inComponent: 0)]
                 nextVC.me.id = uID
+                nextVC.userCount = userCount
             }
         }
     }
