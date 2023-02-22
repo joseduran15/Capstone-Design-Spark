@@ -10,7 +10,7 @@ struct ContentView: View {
     @State var annotationItems: [User] = []
     
     func plotUsers() {
-        for i in 0...10
+        /*for i in 0...10
         {
             var latData = 0.0
             var longData = 0.0
@@ -36,7 +36,7 @@ struct ContentView: View {
                 print(latData)
                 annotationItems.append(User(name:userName,age: userAge,latitude: latData,longitude: longData))
                         });
-        }
+        }*/
     }
     
     

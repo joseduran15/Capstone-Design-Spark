@@ -14,6 +14,7 @@ import FirebaseAnalytics
 import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import FirebaseStorage
 import SwiftUI
 import AVFoundation
 
@@ -23,6 +24,7 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     var uID = ""
     var userCount = 1000
     var ref: DatabaseReference!
+    let storage = Storage.storage()
         
     @IBOutlet weak var ageLabel: UITextField!
     @IBOutlet weak var nameLabel: UITextField!
@@ -144,7 +146,6 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         present(alert, animated: true, completion: nil)
     }
     
-    //this doesn't work the camera displays but this method never runs
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             imageDisplay.image = image
@@ -188,6 +189,28 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         reference.setValue(newUser)
         let childautoID = reference.key
         uID = reference.key ?? "-1"
+        //selfie data
+        let storageRef = storage.reference()
+        let selfieRef = storageRef.child("\(childautoID ?? "yeet")/selfie.jpg")
+        var data = NSData()
+        data = imageDisplay.image!.jpegData(compressionQuality: 0.8)! as NSData
+        let uploadTask = selfieRef.putData(data as Data, metadata: nil) { (metadata, error) in
+          guard let metadata = metadata else {
+            // Uh-oh, an error occurred!
+            return
+          }
+          let size = metadata.size
+          // You can also access to download URL after upload.
+          selfieRef.downloadURL { (url, error) in
+            guard let downloadURL = url else {
+              // Uh-oh, an error occurred!
+              return
+            }
+              self.ref.child("users").child(childautoID!).updateChildValues(["selfie": downloadURL.absoluteString])
+          }
+        }
+        
+        
         //saving userID to persistant storage so when the app is open or closed it will save the profile
         let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
         let profile = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: managedContext)
