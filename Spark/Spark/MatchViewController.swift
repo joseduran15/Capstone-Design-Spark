@@ -13,10 +13,12 @@ import FirebaseAnalytics
 import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import FirebaseStorage
 
 class MatchViewController: UIViewController, CLLocationManagerDelegate
 {
     var ref: DatabaseReference!
+    let storage = Storage.storage()
     var latData1 = 0.0
     var longData1 = 0.0
     
@@ -80,17 +82,17 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             print("othername: \(otherName)")
             
             //display other user's selfie
-            let storageRef = storage.reference()
-            ref = Database.database().reference().child("users").child(me.id ?? "error")
-            ref.observeSingleEvent(of: .value, with: {snapshot in
+            let storageRef = self.storage.reference()
+            self.ref = Database.database().reference().child("users").child(self.me.id ?? "error")
+            self.ref.observeSingleEvent(of: .value, with: {snapshot in
                 
                 if (snapshot.hasChild("selfie"))
                 {
-                    let filePath = "\(appUsers[next] ?? "error")/selfie.jpg"
+                    let filePath = "\(self.appUsers[next] )/selfie.jpg"
                     storageRef.child(filePath).getData(maxSize: 10*1024*1024, completion: { (data, error) in
                                         
                             let userPhoto = UIImage(data: data!)
-                            self.imageViewForTesting.image = userPhoto
+                            self.imageDisplay.image = userPhoto
                         })
                 }
             })

@@ -49,10 +49,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var welcome: UILabel!
     @IBOutlet weak var haversine: UILabel!
-    //ideally this button won't be necessary because you'll automatically go to the profile screen if you don't have an id in coredata but for some reason changing the root view controller programmatically is incredibly annoying so it's like this for now
     @IBOutlet weak var transButton: UIButton!
     
     @IBOutlet weak var imageViewForTesting: UIImageView!
+    
+    
     
     
     
@@ -66,7 +67,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         contentView.didMove(toParent: self)
         //database setup
         ref = Database.database().reference()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(true)
         var isEmpty: Bool {
             do {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
@@ -80,8 +85,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         
         if(isEmpty)
         {
+            
+            //a ui alert will pop up saying that you must create a profile, when you click ok you go to profile view controller
             transButton.isEnabled = true
-            //deactivate the rest of this viewcontroller somehow
+            let alert = UIAlertController(title: "You do not have a profile", message: "Please create a profile to continue using the app", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "To Profile Creation", style: .default, handler: { action in
+                self.transButton.sendActions(for: .touchUpInside)
+                
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
         else
         {
@@ -100,65 +112,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
                        print("Failed")
             }
-            ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
-            ref.getData(completion:  {  error, snapshot in
-                guard error == nil else {
-                    print("issue")
-                    return;
-                }
-                var a: [String: Any] = [:]
-                //turning datasnapshot returned from database into a dictionary
-                a = snapshot?.value as! Dictionary<String, Any>
-                
-                self.me.gender = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
-                self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
-                self.me.age = Int((a["ageData"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
-                self.me.name = a["name"] as? String ?? "error"
-                print(self.me.name)
-                print(self.me.age)
-                print(self.me.orientation)
-                print(self.me.gender)
-            });
+                //where the stuff now in setup is
             
+            setup(completion: {message in
+                self.welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
+            })
             
             //location setup stuff
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
-            welcome.text = String(format:"Welcome to Spark, \(me.name ?? "help")!")
             
-            //image testing
-            let storageRef = storage.reference()
-            ref = Database.database().reference().child("users").child(me.id ?? "error")
-            ref.observeSingleEvent(of: .value, with: {snapshot in
-                
-                if (snapshot.hasChild("selfie"))
-                {
-                    let filePath = "\(self.me.id ?? "error")/selfie.jpg"
-                    storageRef.child(filePath).getData(maxSize: 10*1024*1024, completion: { (data, error) in
-                                        
-                            let userPhoto = UIImage(data: data!)
-                            self.imageViewForTesting.image = userPhoto
-                        })
-                }
-            })
+            
+           
         }
         
-        var locations: [CLLocation] = []
-
-                // ...and fill it with CLLocation objects
-                locations.append(CLLocation(latitude: 48.1623, longitude: 11.5798))
-                locations.append(CLLocation(latitude: 48.1621, longitude: 11.5799))
-                locations.append(CLLocation(latitude: 48.1603, longitude: 11.5763))
-                locations.append(CLLocation(latitude: 48.1622, longitude: 11.5797))
-               
-                
-                let dbscan = DBSCAN(locations)
-                let (sequence, places) = dbscan.findCluster(eps: 75.0, minPts: 0)
-                
-                print(sequence)
-                print(places)
+    }
+    
+    func setup(completion: @escaping (_ message: String) -> Void)
+    {
+        ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
+        ref.getData(completion:  {  error, snapshot in
+            guard error == nil else {
+                print("issue")
+                return;
+            }
+            var a: [String: Any] = [:]
+            //turning datasnapshot returned from database into a dictionary
+            a = snapshot?.value as! Dictionary<String, Any>
+            
+            self.me.gender = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
+            self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+            self.me.age = Int((a["ageData"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
+            self.me.name = a["name"] as? String ?? "error"
+            completion("DONE")
+        });
+        print("ADJLFKAJSDFLK")
     }
     
     @IBAction func clearCoreData(_ sender: Any) {

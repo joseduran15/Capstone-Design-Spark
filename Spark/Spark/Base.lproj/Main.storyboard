@@ -73,7 +73,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="create profile"/>
                                 <connections>
-                                    <segue destination="v1Z-vq-7N0" kind="presentation" modalPresentationStyle="fullScreen" id="gbv-9x-9yJ"/>
+                                    <segue destination="v1Z-vq-7N0" kind="presentation" identifier="toProfileScreen" modalPresentationStyle="fullScreen" id="gbv-9x-9yJ"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N5c-9Z-pkM">
