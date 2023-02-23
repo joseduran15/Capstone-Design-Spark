@@ -116,6 +116,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             
             setup(completion: {message in
                 self.welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
+                    //put photo stuff here and see if that helps idk
             })
             
             //location setup stuff
@@ -148,7 +149,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             self.me.name = a["name"] as? String ?? "error"
             completion("DONE")
         });
-        print("ADJLFKAJSDFLK")
     }
     
     @IBAction func clearCoreData(_ sender: Any) {
@@ -222,7 +222,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toMatchScreen")
         {
-            if let nextVC = segue.destination as? ViewController
+            if let nextVC = segue.destination as? MatchViewController
             {
                 nextVC.me.name = me.name
                 nextVC.me.age = me.age
@@ -230,6 +230,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 nextVC.me.orientation = me.orientation
                 nextVC.me.ageLowerRange = me.ageLowerRange
                 nextVC.me.ageUpperRange = me.ageUpperRange
+                nextVC.me.id = me.id
+                print("in prepare for segue  \(me.id)")
             }
         }
     }

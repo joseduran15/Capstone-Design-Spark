@@ -28,6 +28,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     //gonna change to storing all this stuff in coredata
     var liked: [String] = []
     var unLiked: [String] = []
+    var matched: [String] = []
     
     var appUsers: [String] = []
     
@@ -44,15 +45,13 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         print(ViewController.GlobalLoc.myLong)
         ref = Database.database().reference()
         userObserver()
+        print("in view did load \(me.id)")
     }
     
     @IBOutlet weak var display: UILabel!
     
     func displayNextUser(){
         
-        /*appUsers.append("9")
-        appUsers.append("18")
-        appUsers.append("784")*/
         print("appUsers count: \(appUsers.count)")
         var next = Int.random(in: 0..<appUsers.count)
         while(unLiked.contains(appUsers[next]) || liked.contains(appUsers[next]))
@@ -83,7 +82,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             
             //display other user's selfie
             let storageRef = self.storage.reference()
-            self.ref = Database.database().reference().child("users").child(self.me.id ?? "error")
+            self.ref = Database.database().reference().child("users").child(self.appUsers[next] ?? "error")
             self.ref.observeSingleEvent(of: .value, with: {snapshot in
                 
                 if (snapshot.hasChild("selfie"))
@@ -104,6 +103,32 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     
     @IBAction func matched(_ sender: Any){
         liked.append(currDisplayed)
+        //upload other user id to database
+        print(me.id)
+        ref = Database.database().reference().child("users").child(me.id!).child("liked")
+        var liked: [String : Any] = [:]
+        liked[currDisplayed] = currDisplayed
+        ref.updateChildValues(liked)
+        //check other user's "liked list"
+        ref = Database.database().reference().child("users").child(currDisplayed)
+        ref.observeSingleEvent(of: .value, with: {snapshot in
+            
+            if (snapshot.hasChild("liked"))
+            {
+                if(snapshot.hasChild(self.me.id!))
+                {
+                    self.matched.append(self.currDisplayed)
+                    let alert = UIAlertController(title: "It's a match!", message: "Now you can message this person!", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+                        
+                        
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    //messaging would be enabled here
+                }
+            }
+                
+        })
         displayNextUser()
     }
     
@@ -137,7 +162,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                     
                 }
             }
-            print("it ran")
+            //print("it ran")
             
         })
         
