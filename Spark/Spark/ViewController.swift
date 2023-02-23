@@ -13,6 +13,7 @@ import FirebaseAnalytics
 import FirebaseAnalyticsSwift
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import FirebaseStorage
 import SwiftUI
 import CoreData
 
@@ -35,6 +36,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     //location data
     var locationManager = CLLocationManager()
     var ref: DatabaseReference!
+    let storage = Storage.storage()
     
     var latData1 = 0.0
     var longData1 = 0.0
@@ -49,6 +51,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var haversine: UILabel!
     //ideally this button won't be necessary because you'll automatically go to the profile screen if you don't have an id in coredata but for some reason changing the root view controller programmatically is incredibly annoying so it's like this for now
     @IBOutlet weak var transButton: UIButton!
+    
+    @IBOutlet weak var imageViewForTesting: UIImageView!
+    
     
     
     override func viewDidLoad() {
@@ -122,6 +127,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
             welcome.text = String(format:"Welcome to Spark, \(me.name ?? "help")!")
+            
+            //image testing
+            let storageRef = storage.reference()
+            ref = Database.database().reference().child("users").child(me.id ?? "error")
+            ref.observeSingleEvent(of: .value, with: {snapshot in
+                
+                if (snapshot.hasChild("selfie"))
+                {
+                    let filePath = "\(self.me.id ?? "error")/selfie.jpg"
+                    storageRef.child(filePath).getData(maxSize: 10*1024*1024, completion: { (data, error) in
+                                        
+                            let userPhoto = UIImage(data: data!)
+                            self.imageViewForTesting.image = userPhoto
+                        })
+                }
+            })
         }
         
         var locations: [CLLocation] = []
