@@ -59,9 +59,13 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             while(unLiked.contains(appUsers[next]) || liked.contains(appUsers[next]))
             {
                 next = Int.random(in: 0..<appUsers.count)
+                //check if next exists in the database, if it doesn't remove it from appUsers
+                /*if let index = appUsers.firstIndex(of: appUsers[next])
+                {
+                    appUsers.remove(at: index)
+                }*/
             }
             currDisplayed = appUsers[next]
-            print("appUsers[next]: \(appUsers[next])")
             ref = Database.database().reference().child("users").child(appUsers[next])
             ref.observeSingleEvent(of: .value, with: { snapshot in
                 var a: [String: Any] = [:]

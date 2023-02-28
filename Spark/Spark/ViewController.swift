@@ -154,15 +154,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBAction func clearCoreData(_ sender: Any) {
         
         AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
+        ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
+        ref.removeValue()
         print("ran")
         
     }
     
     
     @IBAction func download(_ sender: Any) {
-        //get the first thousand users from the database
         
-        for i in 0...20
+        //display a user's matches
+        
+        ref = Database.database().reference().child("users").child(me.id!).child("matched")
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            var a: [String: Any] = [:]
+            a = snapshot.value as! Dictionary<String, Any>
+            a.values.forEach {id in
+                self.haversine.text = String(format: self.haversine.text! + "\nYou matched with \(id)")
+            }
+            
+            
+        })
+        
+        /*for i in 0...20
         {
             //points reference to current user we want to get from database
             ref = Database.database().reference().child("users").child(String(i))
@@ -189,7 +204,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 
             });
             
-        }
+        }*/
 
     }
     
