@@ -52,21 +52,6 @@
                                     <segue destination="Iz1-sB-lxq" kind="presentation" identifier="toMatchScreen" modalPresentationStyle="fullScreen" id="GJ6-je-f5R"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4e-1r-TpZ">
-                                <rect key="frame" x="266" y="32" width="104" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="deactivate"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gsf-k3-lma">
-                                <rect key="frame" x="-9" y="90" width="133" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="clear coredata"/>
-                                <connections>
-                                    <action selector="clearCoreData:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0ow-bF-mKq"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lw6-UY-YhV">
                                 <rect key="frame" x="-4" y="132" width="125" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -76,10 +61,15 @@
                                     <segue destination="v1Z-vq-7N0" kind="presentation" identifier="toProfileScreen" modalPresentationStyle="fullScreen" id="gbv-9x-9yJ"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N5c-9Z-pkM">
-                                <rect key="frame" x="75" y="549" width="240" height="128"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gsf-k3-lma">
+                                <rect key="frame" x="272" y="47" width="104" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="deactivate"/>
+                                <connections>
+                                    <action selector="clearCoreData:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0ow-bF-mKq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.91976243260000001" green="0.78677203969999998" blue="0.72637237389999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -87,7 +77,6 @@
                     <navigationItem key="navigationItem" id="UK9-wV-WHZ"/>
                     <connections>
                         <outlet property="haversine" destination="d3Z-2N-t4t" id="AHl-CX-0HX"/>
-                        <outlet property="imageViewForTesting" destination="N5c-9Z-pkM" id="brQ-Nd-B62"/>
                         <outlet property="transButton" destination="Lw6-UY-YhV" id="XYH-1y-Rx1"/>
                         <outlet property="welcome" destination="x6R-P4-wPx" id="WeR-0P-AN8"/>
                     </connections>
@@ -133,6 +122,15 @@
                                 <rect key="frame" x="72" y="180" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ak0-Fm-esK">
+                                <rect key="frame" x="-2" y="73" width="119" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="back to map"/>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" identifier="toMapScreen" modalPresentationStyle="fullScreen" id="db1-D9-10g"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mnI-34-lYm">
                                 <rect key="frame" x="49" y="370" width="46" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -251,6 +249,9 @@
             <point key="canvasLocation" x="1304.6153846153845" y="-98.104265402843595"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="db1-D9-10g"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

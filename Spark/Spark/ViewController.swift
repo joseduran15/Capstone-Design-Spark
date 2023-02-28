@@ -116,7 +116,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             
             setup(completion: {message in
                 self.welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
-                    //put photo stuff here and see if that helps idk
             })
             
             //location setup stuff
@@ -194,7 +193,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
 
     }
     
-    //runs constantly to get user's updated location and put it in the database and also puts profile stuff from former view into database, in the future profile stuff will be in a different method to save calls to database but this is easiest for now
+    //runs constantly to get user's updated location and put it in the database
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         //gets this user's location

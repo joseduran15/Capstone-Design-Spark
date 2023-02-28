@@ -109,13 +109,11 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     @IBAction func matched(_ sender: Any){
         liked.append(currDisplayed)
         //upload other user id to database
-        print(me.id)
         ref = Database.database().reference().child("users").child(me.id!).child("liked")
         var liked: [String : Any] = [:]
         liked[currDisplayed] = currDisplayed
         ref.updateChildValues(liked)
         //check other user's "liked list"
-        
         showUserMatch(completion: { message in
             print("screams")
             if(message == "TRUE")
@@ -126,7 +124,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                     
                 }))
                 self.present(alert, animated: true, completion: nil)
-                //messaging would be enabled here
+                //messaging between you and your new match would be enabled here
             }
             self.displayNextUser()
         })
@@ -136,17 +134,22 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     func showUserMatch(completion: @escaping (_ message: String) -> Void)
     {
         ref = Database.database().reference().child("users").child(currDisplayed).child("liked")
-        print("ok hi")
         ref.observeSingleEvent(of: .value, with: {snapshot in
             
-            print("hello?")
             if (snapshot.exists())
             {
-                print("we got here")
                 
                 if(snapshot.hasChild(self.me.id!))
                 {
-                    print("we also got here")
+                    var ref1 = Database.database().reference().child("users").child(self.currDisplayed).child("matched")
+                    var matched: [String : Any] = [:]
+                    matched[self.me.id!] = self.me.id
+                    ref1.updateChildValues(matched)
+                    var ref2 = Database.database().reference().child("users").child(self.me.id!).child("matched")
+                    var matched2: [String : Any] = [:]
+                    matched2[self.currDisplayed] = self.currDisplayed
+                    ref2.updateChildValues(matched2)
+                    
                     completion("TRUE")
                 }
                 else{
@@ -186,19 +189,32 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 {
                     if((otherName == "Pikachu" || otherName == "Your") && snapshot.key != self.me.id){
                         self.appUsers.append(snapshot.key)
-                        print(snapshot.key)
-                        print(otherGen)
-                        print(otherOrien)
                     }
                     
                 }
             }
-            //print("it ran")
             
         })
         
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "toMapScreen")
+        {
+            if let nextVC = segue.destination as? ViewController
+            {
+                nextVC.me.name = me.name
+                nextVC.me.age = me.age
+                nextVC.me.gender = me.gender
+                nextVC.me.orientation = me.orientation
+                nextVC.me.ageLowerRange = me.ageLowerRange
+                nextVC.me.ageUpperRange = me.ageUpperRange
+                nextVC.me.id = me.id
+            }
+        }
+    }
+
     
     
 }
