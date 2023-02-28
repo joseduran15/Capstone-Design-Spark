@@ -149,6 +149,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             self.me.name = a["name"] as? String ?? "error"
             completion("DONE")
         });
+        
     }
     
     @IBAction func clearCoreData(_ sender: Any) {

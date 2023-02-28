@@ -178,6 +178,7 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         gendData["gender"] = genders[genderPicker.selectedRow(inComponent: 0)]
         gendData["orientation"] = orientations[orientationPicker.selectedRow(inComponent: 0)]
         var name = nameLabel.text
+        
         //creating final dictionary
         let newUser = ["locData": locData,
                        "gendData": gendData,
