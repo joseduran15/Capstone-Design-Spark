@@ -23,6 +23,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     var longData1 = 0.0
     
     var currDisplayed = ""
+    var currDisplayedName = ""
     var me = User()
     
     //gonna change to storing all this stuff in coredata
@@ -45,10 +46,18 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         print(ViewController.GlobalLoc.myLong)
         ref = Database.database().reference()
         userObserver()
-        print("in view did load \(me.id)")
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(true)
+        
+        displayNextUser()
     }
     
     @IBOutlet weak var display: UILabel!
+    
+    @IBOutlet weak var displayOtherInfo: UILabel!
     
     func displayNextUser(){
         
@@ -77,12 +86,15 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+                var otherAge = (a["ageData"] as? [String:Any])?["age"] as? String ?? "error"
                 var otherName = a["name"]
+                self.currDisplayedName = otherName as! String
                 //calculate distance between this user and other
                 var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
                 //checks if the distance is less than 2 miles
                 
                 self.display.text = otherName as? String
+                self.displayOtherInfo.text = "\(otherAge) years old \n\(otherGen)\n"
                 
                 //display other user's selfie
                 let storageRef = self.storage.reference()
@@ -147,11 +159,11 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 {
                     var ref1 = Database.database().reference().child("users").child(self.currDisplayed).child("matched")
                     var matched: [String : Any] = [:]
-                    matched[self.me.id!] = self.me.id
+                    matched[self.me.id!] = self.me.name
                     ref1.updateChildValues(matched)
                     var ref2 = Database.database().reference().child("users").child(self.me.id!).child("matched")
                     var matched2: [String : Any] = [:]
-                    matched2[self.currDisplayed] = self.currDisplayed
+                    matched2[self.currDisplayed] = self.currDisplayedName
                     ref2.updateChildValues(matched2)
                     
                     completion("TRUE")
@@ -171,10 +183,6 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         unLiked.append(currDisplayed)
         displayNextUser()
         
-    }
-    
-    @IBAction func testingMethod(_ sender: Any) {
-        displayNextUser()
     }
     
     func userObserver()
