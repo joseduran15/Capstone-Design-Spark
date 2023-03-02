@@ -44,6 +44,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     //global var to keep track of number of users in database
     var userCount = 1000
     
+    var loaded = false
+    
     //this profile's user data
     var me = User(name: "", age: 0, ageUpperRange: 0, ageLowerRange: 0, orientation: "", gender: "", latitude: GlobalLoc.myLat, longitude: GlobalLoc.myLong)
 
@@ -60,11 +62,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        //map initialization
-        let contentView = UIHostingController(rootView: ContentView())
-        contentView.view.frame = CGRectMake(20 , 170, self.view.frame.width * 0.9, self.view.frame.height * 0.3)
-        view.addSubview(contentView.view)
-        contentView.didMove(toParent: self)
         //database setup
         ref = Database.database().reference()
     }
@@ -72,61 +69,74 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(true)
-        var isEmpty: Bool {
-            do {
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
-                let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
-                let count  = try managedContext.count(for: request)
-                return count == 0
-            } catch {
-                return true
-            }
-        }
-        
-        if(isEmpty)
+        print(UserDefaults.standard.bool(forKey: "LOADED"))
+        if (UserDefaults.standard.bool(forKey: "LOADED") == false)
         {
+            print("TESTING TESTING")
+            var isEmpty: Bool {
+                do {
+                    let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
+                    let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+                    let count  = try managedContext.count(for: request)
+                    return count == 0
+                } catch {
+                    return true
+                }
+            }
             
-            //a ui alert will pop up saying that you must create a profile, when you click ok you go to profile view controller
-            transButton.isEnabled = true
-            let alert = UIAlertController(title: "You do not have a profile", message: "Please create a profile to continue using the app", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "To Profile Creation", style: .default, handler: { action in
-                self.transButton.sendActions(for: .touchUpInside)
+            if(isEmpty)
+            {
                 
-            }))
-            self.present(alert, animated: true, completion: nil)
+                //a ui alert will pop up saying that you must create a profile, when you click ok you go to profile view controller
+                transButton.isEnabled = true
+                let alert = UIAlertController(title: "You do not have a profile", message: "Please create a profile to continue using the app", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "To Profile Creation", style: .default, handler: { action in
+                    self.transButton.sendActions(for: .touchUpInside)
+                    
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else
+            {
+                let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
+                request.returnsObjectsAsFaults = false
+                do {
+                    let result = try managedContext.fetch(request)
+                    for data in result as! [NSManagedObject]
+                    {
+                        me.id = data.value(forKey: "userID") as! String
+                        print(data.value(forKey: "userID") as! String)
+                    }
+                    
+                } catch {
+                    
+                    print("Failed")
+                }
+                //where the stuff now in setup is
+                
+                setup(completion: {message in
+                    self.welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
+                })
+                
+                //location setup stuff
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.requestWhenInUseAuthorization()
+                locationManager.startUpdatingLocation()
+                UserDefaults.standard.set(true, forKey: "LOADED")
+            }
         }
         else
         {
-            let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
-            request.returnsObjectsAsFaults = false
-            do {
-                let result = try managedContext.fetch(request)
-                for data in result as! [NSManagedObject]
-            {
-                me.id = data.value(forKey: "userID") as! String
-                print(data.value(forKey: "userID") as! String)
-              }
-
-                   } catch {
-
-                       print("Failed")
-            }
-                //where the stuff now in setup is
-            
-            setup(completion: {message in
-                self.welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
-            })
-            
-            //location setup stuff
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.startUpdatingLocation()
-            
-            
-           
+            welcome.text = String(format:"Welcome to Spark, \(self.me.name ?? "help")!")
         }
+            //map initialization
+        let contentView = UIHostingController(rootView: ContentView())
+        contentView.view.frame = CGRectMake(20 , 170, self.view.frame.width * 0.9, self.view.frame.height * 0.3)
+        view.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
+        
         
     }
     
