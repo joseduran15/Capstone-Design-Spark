@@ -241,17 +241,16 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     //send data to next view controller on segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "toMapScreen")
+        if(segue.identifier == "toNextProfile")
         {
-            if let nextVC = segue.destination as? ViewController
+            if let nextVC = segue.destination as? ProfileViewController2
             {
                 profileDataIntoDatabase()
-                nextVC.me.name = nameLabel.text ?? "default"
-                nextVC.me.age = Int(ageLabel.text ?? "-1") ?? -1
-                nextVC.me.gender = genders[genderPicker.selectedRow(inComponent: 0)]
-                nextVC.me.orientation = orientations[orientationPicker.selectedRow(inComponent: 0)]
-                nextVC.me.id = uID
-                nextVC.userCount = userCount
+                nextVC.name = nameLabel.text ?? "default"
+                nextVC.age = Int(ageLabel.text ?? "-1") ?? -1
+                nextVC.gender = genders[genderPicker.selectedRow(inComponent: 0)]
+                nextVC.orientation = orientations[orientationPicker.selectedRow(inComponent: 0)]
+                nextVC.id = uID
             }
         }
     }

@@ -53,12 +53,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var haversine: UILabel!
     @IBOutlet weak var transButton: UIButton!
     
-    @IBOutlet weak var imageViewForTesting: UIImageView!
-    
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -164,8 +158,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBAction func clearCoreData(_ sender: Any) {
         
         AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
-        ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
-        ref.removeValue()
+        //ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
+        //ref.removeValue()
+        //stop location manager
+        locationManager.stopUpdatingLocation()
+        UserDefaults.standard.set(false, forKey: "LOADED")
+        transButton.isEnabled = true
+        let alert = UIAlertController(title: "You do not have a profile", message: "Please create a profile to continue using the app", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "To Profile Creation", style: .default, handler: { action in
+            self.transButton.sendActions(for: .touchUpInside)
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
         print("ran")
         
     }
@@ -178,43 +182,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         ref = Database.database().reference().child("users").child(me.id!).child("matched")
         ref.observeSingleEvent(of: .value, with: { snapshot in
             
-            var a: [String: Any] = [:]
-            a = snapshot.value as! Dictionary<String, Any>
-            a.values.forEach {id in
-                self.haversine.text = String(format: self.haversine.text! + "\nYou matched with \(id)")
+            if(snapshot.exists())
+            {
+                var a: [String: Any] = [:]
+                a = snapshot.value as! Dictionary<String, Any>
+                a.values.forEach {id in
+                    self.haversine.text = String(format: self.haversine.text! + "\nYou matched with \(id)")
+                }
             }
             
             
         })
-        
-        /*for i in 0...20
-        {
-            //points reference to current user we want to get from database
-            ref = Database.database().reference().child("users").child(String(i))
-            ref.getData(completion:  { error, snapshot in
-                guard error == nil else {
-                    print("issue")
-                    return;
-                }
-                var a: [String: Any] = [:]
-                //turning datasnapshot returned from database into a dictionary
-                a = snapshot?.value as! Dictionary<String, Any>
-                //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
-                self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
-                self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
-                var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
-                var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
-                //calculate distance between this user and other
-                var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
-                //checks if the distance is less than 2 miles and if the gender/orientation of this user and other user are compatible
-                if(distance < 2 && (self.me.gender == otherOrien || otherOrien == "All") && (self.me.orientation == otherGen || self.me.orientation == "All")){
-                    self.haversine.text = String(format: self.haversine.text! + "\n distance between you and \(a["name"] ?? "error") : %f",distance)
-                }
-                
-                
-            });
-            
-        }*/
 
     }
     

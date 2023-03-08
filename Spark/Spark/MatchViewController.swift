@@ -45,14 +45,16 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         print(ViewController.GlobalLoc.myLat)
         print(ViewController.GlobalLoc.myLong)
         ref = Database.database().reference()
-        userObserver()
+        
     }
     
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(true)
+        userObserver(completion: {message in
+            self.displayNextUser()
+        })
         
-        displayNextUser()
     }
     
     @IBOutlet weak var display: UILabel!
@@ -118,6 +120,9 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         else
         {
             display.text = "No more users to display."
+            displayOtherInfo.text = ""
+            imageDisplay.image = nil
+            
         }
     }
     
@@ -185,7 +190,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         
     }
     
-    func userObserver()
+    func userObserver(completion: @escaping (_ message: String) -> Void)
     {
         ref.child("users").observe(DataEventType.childAdded, with: { snapshot in
             
@@ -197,15 +202,18 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             var otherName = a["name"] as! String
             if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
             {
+                
                 if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
                 {
-                    if((otherName == "Pikachu" || otherName == "Your") && snapshot.key != self.me.id){
+                    
+                    if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
                         self.appUsers.append(snapshot.key)
+                        print(snapshot.key)
+                        completion("DONE")
                     }
                     
                 }
             }
-            
         })
         
         
@@ -230,3 +238,4 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     
     
 }
+

@@ -16,6 +16,9 @@
 		5183437229918039001F72B3 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5183437129918039001F72B3 /* CoreDataStack.swift */; };
 		51834374299426BF001F72B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51834373299426BF001F72B3 /* GoogleService-Info.plist */; };
 		5183437629A461E1001F72B3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5183437529A461E1001F72B3 /* FirebaseStorage */; };
+		5185074429B3CC18008357B9 /* ProfileViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185074329B3CC18008357B9 /* ProfileViewController2.swift */; };
+		5185074B29B3D6AE008357B9 /* DoubleSlider in Frameworks */ = {isa = PBXBuildFile; productRef = 5185074A29B3D6AE008357B9 /* DoubleSlider */; };
+		5185075229B3DE26008357B9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185075129B3DE26008357B9 /* SettingsViewController.swift */; };
 		51E14B46290DB66F00D0AB48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B45290DB66F00D0AB48 /* AppDelegate.swift */; };
 		51E14B48290DB66F00D0AB48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */; };
 		51E14B4A290DB66F00D0AB48 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14B49290DB66F00D0AB48 /* ViewController.swift */; };
@@ -58,6 +61,8 @@
 		5183436E29917FEE001F72B3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5183437129918039001F72B3 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		51834373299426BF001F72B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5185074329B3CC18008357B9 /* ProfileViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController2.swift; sourceTree = "<group>"; };
+		5185075129B3DE26008357B9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51E14B42290DB66F00D0AB48 /* Spark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E14B45290DB66F00D0AB48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +85,7 @@
 			files = (
 				51E14B7F2918A3B800D0AB48 /* FirebaseAnalyticsSwift in Frameworks */,
 				51E14B7D2918A12400D0AB48 /* FirebaseDatabaseSwift in Frameworks */,
+				5185074B29B3D6AE008357B9 /* DoubleSlider in Frameworks */,
 				51E14B7B2918A10A00D0AB48 /* FirebaseDatabase in Frameworks */,
 				5183437629A461E1001F72B3 /* FirebaseStorage in Frameworks */,
 				D3CBCAB1291444D600C2FE22 /* FirebaseAnalytics in Frameworks */,
@@ -142,6 +148,8 @@
 				31802EC02993019F00C667E9 /* GoogleService-Info.plist */,
 				5183437029918012001F72B3 /* CoreData */,
 				51E14B4B290DB66F00D0AB48 /* Main.storyboard */,
+				5185075129B3DE26008357B9 /* SettingsViewController.swift */,
+				5185074329B3CC18008357B9 /* ProfileViewController2.swift */,
 				5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */,
 				511D1DD12942A9D600A27882 /* ContentView.swift */,
 				511D1DCF2942A99700A27882 /* User.swift */,
@@ -201,6 +209,7 @@
 				51E14B7C2918A12400D0AB48 /* FirebaseDatabaseSwift */,
 				51E14B7E2918A3B800D0AB48 /* FirebaseAnalyticsSwift */,
 				5183437529A461E1001F72B3 /* FirebaseStorage */,
+				5185074A29B3D6AE008357B9 /* DoubleSlider */,
 			);
 			productName = Spark;
 			productReference = 51E14B42290DB66F00D0AB48 /* Spark.app */;
@@ -276,6 +285,7 @@
 			mainGroup = 51E14B39290DB66F00D0AB48;
 			packageReferences = (
 				D3CBCAAF291444D600C2FE22 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5185074929B3D6AE008357B9 /* XCRemoteSwiftPackageReference "DoubleSlider" */,
 			);
 			productRefGroup = 51E14B43290DB66F00D0AB48 /* Products */;
 			projectDirPath = "";
@@ -322,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				511D1DD62985F77C00A27882 /* MatchViewController.swift in Sources */,
+				5185074429B3CC18008357B9 /* ProfileViewController2.swift in Sources */,
 				51E14B4A290DB66F00D0AB48 /* ViewController.swift in Sources */,
 				51E14B46290DB66F00D0AB48 /* AppDelegate.swift in Sources */,
 				511D1DD22942A9D600A27882 /* ContentView.swift in Sources */,
@@ -331,6 +342,7 @@
 				511D1DCE2942A68800A27882 /* DBSCAN.swift in Sources */,
 				511D1DCC293D592F00A27882 /* ProfileViewController.swift in Sources */,
 				51E14B48290DB66F00D0AB48 /* SceneDelegate.swift in Sources */,
+				5185075229B3DE26008357B9 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +684,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5185074929B3D6AE008357B9 /* XCRemoteSwiftPackageReference "DoubleSlider" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yhkaplan/DoubleSlider";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		D3CBCAAF291444D600C2FE22 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -687,6 +707,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D3CBCAAF291444D600C2FE22 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		5185074A29B3D6AE008357B9 /* DoubleSlider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5185074929B3D6AE008357B9 /* XCRemoteSwiftPackageReference "DoubleSlider" */;
+			productName = DoubleSlider;
 		};
 		51E14B7A2918A10A00D0AB48 /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
