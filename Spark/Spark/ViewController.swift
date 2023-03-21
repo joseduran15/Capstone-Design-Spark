@@ -256,6 +256,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 nextVC.me.id = me.id
             }
         }
+        if(segue.identifier == "toMessageScreen")
+        {
+            if let nextVC = segue.destination as? MessageViewController
+            {
+                nextVC.me.name = me.name
+                nextVC.me.age = me.age
+                nextVC.me.gender = me.gender
+                nextVC.me.orientation = me.orientation
+                nextVC.me.ageLowerRange = me.ageLowerRange
+                nextVC.me.ageUpperRange = me.ageUpperRange
+                nextVC.me.id = me.id
+                print("in prepare for segue  \(me.id)")
+            }
+        }
     }
 
 }

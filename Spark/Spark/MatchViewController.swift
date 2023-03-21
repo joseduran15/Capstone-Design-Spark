@@ -90,13 +90,14 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
                 var otherAge = (a["ageData"] as? [String:Any])?["age"] as? String ?? "error"
                 var otherName = a["name"]
+                var otherBio = a["bio"]
                 self.currDisplayedName = otherName as! String
                 //calculate distance between this user and other
                 var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
                 //checks if the distance is less than 2 miles
                 
                 self.display.text = otherName as? String
-                self.displayOtherInfo.text = "\(otherAge) years old \n\(otherGen)\n"
+                self.displayOtherInfo.text = "\(otherAge) years old \n\(otherGen)\n\(otherBio)"
                 
                 //display other user's selfie
                 let storageRef = self.storage.reference()
