@@ -43,6 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(false, forKey: "LOADED")
         }
         
+        //setting up userdefaults for profile
+        let id = UserDefaults.standard.string(forKey: "UID")
+        let name = UserDefaults.standard.string(forKey: "NAME")
+        let ageLower = UserDefaults.standard.integer(forKey: "AGELOWER")
+        let ageUpper = UserDefaults.standard.integer(forKey: "AGEUPPER")
+        let age = UserDefaults.standard.integer(forKey: "AGE")
+        let gender = UserDefaults.standard.string(forKey: "GENDER")
+        let orientation = UserDefaults.standard.string(forKey: "ORIENTATION")
+        
+        
         return true
     }
 

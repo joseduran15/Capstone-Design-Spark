@@ -16,7 +16,7 @@ import FirebaseStorage
 import SwiftUI
 import DoubleSlider
 
-class ProfileViewController2: UIViewController, UITextFieldDelegate
+class ProfileViewController2: UIViewController, UITextViewDelegate
 {
     
     var name = ""
@@ -28,8 +28,12 @@ class ProfileViewController2: UIViewController, UITextFieldDelegate
     
     @IBOutlet weak var minAge: UISlider!
     @IBOutlet weak var maxAge: UISlider!
-    @IBOutlet weak var bio: UITextField!
     @IBOutlet weak var charactersUsed: UILabel!
+    @IBOutlet weak var bio: UITextView!
+    @IBOutlet weak var minAgeLabel: UILabel!
+    @IBOutlet weak var maxAgeLabel: UILabel!
+    
+    var pressedButtons: [String] = []
     
     
     override func viewDidLoad() {
@@ -47,7 +51,9 @@ class ProfileViewController2: UIViewController, UITextFieldDelegate
         {
             let button:UIButton = UIButton(frame: CGRect(x: theX, y: theY, width: 100, height: 50))
             button.setTitle(x, for: .normal)
-            button.setTitleColor(.red, for: .normal)
+            button.setTitleColor(.blue, for: .normal)
+            button.setTitleColor(.red, for:. selected)
+            button.addTarget(self, action: #selector(drinkButtons(_:)), for: .touchUpInside)
             self.view.addSubview(button)
             
             if(theX + 50 > Int(self.view.frame.width))
@@ -61,22 +67,56 @@ class ProfileViewController2: UIViewController, UITextFieldDelegate
             }
         }
         
+        bio.layer.borderColor = UIColor.lightGray.cgColor
+        bio.layer.borderWidth = 1.0
+        bio.layer.cornerRadius = 8
         
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        charactersUsed.text = "\(textField.text?.count)"
-        let maxLength = 75
-        let currentString = (textField.text ?? "") as NSString
-        let newString = currentString.replacingCharacters(in: range, with: string)
-
-        return newString.count <= maxLength
+    @IBAction func minSliderVal(_ sender: UISlider) {
+        
+        minAgeLabel.text = String(sender.value)
+    }
+    
+    @IBAction func maxSliderVal(_ sender: UISlider) {
+        maxAgeLabel.text = String(sender.value)
+    }
+    
+    
+    
+    @objc func drinkButtons(_ sender: UIButton)
+    {
+        if(!sender.isSelected)
+        {
+            sender.isSelected = true
+            pressedButtons.append(sender.currentTitle!)
+            
+        }
+        else
+        {
+            sender.isSelected = false
+            if let index = pressedButtons.firstIndex(of: sender.currentTitle!)
+            {
+                pressedButtons.remove(at: index)
+            }
+        }
+        print(pressedButtons)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        charactersUsed.text = String(updatedText.count)
+        return updatedText.count <= 75
     }
     
     //make keyboard go away
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(false)
     }
+
     
     func moreDataIntoDatabase()
     {
@@ -87,6 +127,9 @@ class ProfileViewController2: UIViewController, UITextFieldDelegate
         var ageUpperRange: [String: Any] = [:]
         ageUpperRange["ageUpperRange"] = maxAge.value
         ref.updateChildValues(ageUpperRange)
+        ref = Database.database().reference().child("users").child(id).child("bio")
+        ref.setValue(bio.text)
+        
         
     }
     

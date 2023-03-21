@@ -66,7 +66,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         print(UserDefaults.standard.bool(forKey: "LOADED"))
         if (UserDefaults.standard.bool(forKey: "LOADED") == false)
         {
-            print("TESTING TESTING")
             var isEmpty: Bool {
                 do {
                     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Profile")
@@ -119,6 +118,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 locationManager.requestWhenInUseAuthorization()
                 locationManager.startUpdatingLocation()
                 UserDefaults.standard.set(true, forKey: "LOADED")
+                
             }
         }
         else
@@ -150,6 +150,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
             self.me.age = Int((a["ageData"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
             self.me.name = a["name"] as? String ?? "error"
+            UserDefaults.standard.set(self.me.name, forKey: "NAME")
+            UserDefaults.standard.set(self.me.age, forKey: "AGE")
+            UserDefaults.standard.set(self.me.gender, forKey: "GENDER")
+            UserDefaults.standard.set(self.me.orientation, forKey: "ORIENTATION")
+            UserDefaults.standard.set(self.me.id, forKey: "UID")
+            
+            
             completion("DONE")
         });
         
@@ -234,7 +241,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 nextVC.me.ageLowerRange = me.ageLowerRange
                 nextVC.me.ageUpperRange = me.ageUpperRange
                 nextVC.me.id = me.id
-                print("in prepare for segue  \(me.id)")
+            }
+        }
+        if(segue.identifier == "toSettings")
+        {
+            if let nextVC = segue.destination as? SettingsViewController
+            {
+                nextVC.me.name = me.name
+                nextVC.me.age = me.age
+                nextVC.me.gender = me.gender
+                nextVC.me.orientation = me.orientation
+                nextVC.me.ageLowerRange = me.ageLowerRange
+                nextVC.me.ageUpperRange = me.ageUpperRange
+                nextVC.me.id = me.id
             }
         }
     }
