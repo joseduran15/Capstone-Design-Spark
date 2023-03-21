@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31A569B329C9362200B8B3DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 31A569B229C9362200B8B3DA /* GoogleService-Info.plist */; };
 		511D1DCC293D592F00A27882 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCB293D592F00A27882 /* ProfileViewController.swift */; };
 		511D1DCE2942A68800A27882 /* DBSCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCD2942A68800A27882 /* DBSCAN.swift */; };
 		511D1DD02942A99700A27882 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DCF2942A99700A27882 /* User.swift */; };
@@ -14,7 +15,6 @@
 		511D1DD62985F77C00A27882 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D1DD52985F77C00A27882 /* MatchViewController.swift */; };
 		5183436F29917FEE001F72B3 /* Profile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5183436D29917FEE001F72B3 /* Profile.xcdatamodeld */; };
 		5183437229918039001F72B3 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5183437129918039001F72B3 /* CoreDataStack.swift */; };
-		51834374299426BF001F72B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51834373299426BF001F72B3 /* GoogleService-Info.plist */; };
 		5183437629A461E1001F72B3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5183437529A461E1001F72B3 /* FirebaseStorage */; };
 		5185074429B3CC18008357B9 /* ProfileViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5185074329B3CC18008357B9 /* ProfileViewController2.swift */; };
 		5185074B29B3D6AE008357B9 /* DoubleSlider in Frameworks */ = {isa = PBXBuildFile; productRef = 5185074A29B3D6AE008357B9 /* DoubleSlider */; };
@@ -52,7 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		31802EC02993019F00C667E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		31A569B229C9362200B8B3DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		511D1DCB293D592F00A27882 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		511D1DCD2942A68800A27882 /* DBSCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBSCAN.swift; sourceTree = "<group>"; };
 		511D1DCF2942A99700A27882 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -60,7 +60,6 @@
 		511D1DD52985F77C00A27882 /* MatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
 		5183436E29917FEE001F72B3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5183437129918039001F72B3 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		51834373299426BF001F72B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5185074329B3CC18008357B9 /* ProfileViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController2.swift; sourceTree = "<group>"; };
 		5185075129B3DE26008357B9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51E14B42290DB66F00D0AB48 /* Spark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spark.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,11 +140,10 @@
 		51E14B44290DB66F00D0AB48 /* Spark */ = {
 			isa = PBXGroup;
 			children = (
-				51834373299426BF001F72B3 /* GoogleService-Info.plist */,
 				51E14B45290DB66F00D0AB48 /* AppDelegate.swift */,
+				31A569B229C9362200B8B3DA /* GoogleService-Info.plist */,
 				51E14B47290DB66F00D0AB48 /* SceneDelegate.swift */,
 				51E14B49290DB66F00D0AB48 /* ViewController.swift */,
-				31802EC02993019F00C667E9 /* GoogleService-Info.plist */,
 				5183437029918012001F72B3 /* CoreData */,
 				51E14B4B290DB66F00D0AB48 /* Main.storyboard */,
 				5185075129B3DE26008357B9 /* SettingsViewController.swift */,
@@ -304,7 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51E14B52290DB67000D0AB48 /* LaunchScreen.storyboard in Resources */,
-				51834374299426BF001F72B3 /* GoogleService-Info.plist in Resources */,
+				31A569B329C9362200B8B3DA /* GoogleService-Info.plist in Resources */,
 				51E14B4F290DB67000D0AB48 /* Assets.xcassets in Resources */,
 				51E14B4D290DB66F00D0AB48 /* Main.storyboard in Resources */,
 			);
@@ -519,7 +517,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V939WYTK75;
+				DEVELOPMENT_TEAM = 6S2WDM6FUC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Spark/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -548,7 +546,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V939WYTK75;
+				DEVELOPMENT_TEAM = 6S2WDM6FUC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Spark/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
