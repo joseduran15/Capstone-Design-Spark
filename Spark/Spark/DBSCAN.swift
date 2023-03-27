@@ -105,9 +105,9 @@ class DBSCAN {
 
             places.append(Cluster(location: location, members: members))
 
-            print(members)
+            //print(members)
             //This splits the array of coordinates into the different clusters
-            print(location)
+            //print(location)
             //This states the specific coordinates in each cluster
         }
         

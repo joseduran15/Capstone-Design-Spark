@@ -225,13 +225,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         {
             if let nextVC = segue.destination as? ViewController
             {
-                nextVC.me.name = me.name
-                nextVC.me.age = me.age
-                nextVC.me.gender = me.gender
-                nextVC.me.orientation = me.orientation
-                nextVC.me.ageLowerRange = me.ageLowerRange
-                nextVC.me.ageUpperRange = me.ageUpperRange
-                nextVC.me.id = me.id
+                nextVC.me = me
             }
         }
     }

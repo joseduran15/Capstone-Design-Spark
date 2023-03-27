@@ -63,7 +63,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(true)
-        print(UserDefaults.standard.bool(forKey: "LOADED"))
+        //print(UserDefaults.standard.bool(forKey: "LOADED"))
         if (UserDefaults.standard.bool(forKey: "LOADED") == false)
         {
             var isEmpty: Bool {
@@ -150,6 +150,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             self.me.orientation = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
             self.me.age = Int((a["ageData"] as? [String:Any])?["age"] as? String ?? "-1") ?? -5
             self.me.name = a["name"] as? String ?? "error"
+            self.me.ageUpperRange = (a["ageData"] as? [String:Any])?["ageUpperRange"] as? Int ?? -5
+            self.me.ageLowerRange = (a["ageData"] as? [String:Any])?["ageLowerRange"] as? Int ?? -5
             UserDefaults.standard.set(self.me.name, forKey: "NAME")
             UserDefaults.standard.set(self.me.age, forKey: "AGE")
             UserDefaults.standard.set(self.me.gender, forKey: "GENDER")
@@ -234,40 +236,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         {
             if let nextVC = segue.destination as? MatchViewController
             {
-                nextVC.me.name = me.name
-                nextVC.me.age = me.age
-                nextVC.me.gender = me.gender
-                nextVC.me.orientation = me.orientation
-                nextVC.me.ageLowerRange = me.ageLowerRange
-                nextVC.me.ageUpperRange = me.ageUpperRange
-                nextVC.me.id = me.id
+                nextVC.me = me
             }
         }
         if(segue.identifier == "toSettings")
         {
             if let nextVC = segue.destination as? SettingsViewController
             {
-                nextVC.me.name = me.name
-                nextVC.me.age = me.age
-                nextVC.me.gender = me.gender
-                nextVC.me.orientation = me.orientation
-                nextVC.me.ageLowerRange = me.ageLowerRange
-                nextVC.me.ageUpperRange = me.ageUpperRange
-                nextVC.me.id = me.id
+                nextVC.me = me
             }
         }
         if(segue.identifier == "toMessageScreen")
         {
             if let nextVC = segue.destination as? MessageViewController
             {
-                nextVC.me.name = me.name
-                nextVC.me.age = me.age
-                nextVC.me.gender = me.gender
-                nextVC.me.orientation = me.orientation
-                nextVC.me.ageLowerRange = me.ageLowerRange
-                nextVC.me.ageUpperRange = me.ageUpperRange
-                nextVC.me.id = me.id
-                print("in prepare for segue  \(me.id)")
+                nextVC.me = me
             }
         }
     }

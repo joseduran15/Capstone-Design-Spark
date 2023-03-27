@@ -75,11 +75,11 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
     
     @IBAction func minSliderVal(_ sender: UISlider) {
         
-        minAgeLabel.text = String(sender.value)
+        minAgeLabel.text = String(Int(sender.value))
     }
     
     @IBAction func maxSliderVal(_ sender: UISlider) {
-        maxAgeLabel.text = String(sender.value)
+        maxAgeLabel.text = String(Int(sender.value))
     }
     
     
@@ -122,10 +122,11 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
     {
         ref = ref.child("users").child(id).child("ageData")
         var ageLowerRange: [String: Any] = [:]
-        ageLowerRange["ageLowerRange"] = minAge.value
+        ageLowerRange["ageLowerRange"] = Int(minAge.value)
         ref.updateChildValues(ageLowerRange)
+        
         var ageUpperRange: [String: Any] = [:]
-        ageUpperRange["ageUpperRange"] = maxAge.value
+        ageUpperRange["ageUpperRange"] = Int(maxAge.value)
         ref.updateChildValues(ageUpperRange)
         ref = Database.database().reference().child("users").child(id).child("bio")
         ref.setValue(bio.text)
@@ -144,6 +145,8 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
                 nextVC.me.gender = gender
                 nextVC.me.orientation = orientation
                 nextVC.me.id = id
+                nextVC.me.ageUpperRange = Int(maxAge.value)
+                nextVC.me.ageLowerRange = Int(minAge.value)
             }
         }
     }
