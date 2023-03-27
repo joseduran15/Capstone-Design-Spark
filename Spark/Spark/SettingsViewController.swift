@@ -46,12 +46,12 @@ class SettingsViewController: UIViewController
         displayProfile.text = "Name: \(me.name ?? "-1") \nAge: \(me.age) \nGender: \(me.gender ?? "-1")\nAge Range: \(me.ageLowerRange)-\(me.ageUpperRange)\nOrientation: \(me.orientation ?? "-1")\n"
             
         ref = Database.database().reference().child("users").child(me.id!)
-        let storageRef = self.storage.reference()
+        let storageRef = storage.reference()
         ref.observeSingleEvent(of: .value, with: {snapshot in
                 
                 if (snapshot.hasChild("selfie"))
                 {
-                    let filePath = "\(self.me.id )/selfie.jpg"
+                    let filePath = "\(self.me.id ?? "god" )/selfie.jpg"
                     storageRef.child(filePath).getData(maxSize: 10*1024*1024, completion: { (data, error) in
                         
                         let userPhoto = UIImage(data: data!)
