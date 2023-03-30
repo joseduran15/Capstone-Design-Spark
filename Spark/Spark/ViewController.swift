@@ -167,6 +167,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBAction func clearCoreData(_ sender: Any) {
         
         AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
+       
+        ref = Database.database().reference().child("users").child(me.id ?? "that's bad").child("matched")
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            if(snapshot.exists())
+            {
+                //need to get a list of everyone you've matched with, go through that list and remove you from their matched list and then delete their conversatoin with you if there is one
+            }
+        })
+        //then take your userid and use it to delete your selfie from firestore
+        ref = Database.database().reference().child("users").child(me.id!)
+        let storageRef = storage.reference()
+        ref.observeSingleEvent(of: .value, with: {snapshot in
+                
+            if (snapshot.hasChild("selfie"))
+            {
+                    let filePath = "\(self.me.id ?? "god" )/selfie.jpg"
+                    
+                    storageRef.child(filePath).delete { error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            // File deleted successfully
+                        }
+                        
+                    }
+                }
+            })
+        //this would remove your branch - this will happen last
         //ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
         //ref.removeValue()
         //stop location manager

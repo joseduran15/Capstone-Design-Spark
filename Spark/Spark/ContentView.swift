@@ -283,7 +283,7 @@ struct MapView: UIViewRepresentable {
         var tempLocations: [CLLocation] = []
         let dispatchGroup = DispatchGroup()
         
-        for i in 0...100 {
+        for i in 0...99 {
             dispatchGroup.enter()
             var ref: DatabaseReference!
             ref = Database.database().reference().child("users").child(String(i))
