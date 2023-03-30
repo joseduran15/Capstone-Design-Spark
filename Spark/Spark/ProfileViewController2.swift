@@ -42,29 +42,28 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
         ref = Database.database().reference()
         bio.delegate = self
         
-        var things = ["vodka", "gin", "rum", "tequila", "amaretto", "whiskey", "bourbon","scotch", "baileys", "modelo", "corona", "IPA", "cranberry", "lemon", "lime", "orange", "grenadine", "soda", "coke", "pepsi", "sour", "on the rocks", "shot", "peach", "not an alcohol fan!"]
+        var things = ["vodka", "gin", "rum", "tequila", "amaretto", "whiskey", "bourbon","scotch", "baileys", "modelo", "corona", "IPA", "cranberry", "lemon", "lime", "orange", "grenadine", "soda", "coke", "pepsi", "sour", "on the rocks", "shot", "peach", "sprite", "ginger beer", "not an alcohol fan!"]
         
         var drinkOptions: [UIButton] = []
-        var theX = 0
+        var theX = 20
         var theY = 475
         for x in things
         {
             let button:UIButton = UIButton(frame: CGRect(x: theX, y: theY, width: 100, height: 50))
             button.setTitle(x, for: .normal)
             button.setTitleColor(.blue, for: .normal)
-            button.setTitleColor(.red, for:. selected)
+            button.setTitleColor(.magenta, for:. selected)
+            button.titleLabel?.textAlignment = .center
+            button.sizeToFit()
             button.addTarget(self, action: #selector(drinkButtons(_:)), for: .touchUpInside)
             self.view.addSubview(button)
-            
-            if(theX + 50 > Int(self.view.frame.width))
+            theX += Int(button.frame.width) + 10
+            if(theX + 60 > Int(self.view.frame.width))
             {
-                theX = 0
+                theX = 20
                 theY += 40
             }
-            else
-            {
-                theX += 100
-            }
+            
         }
         
         bio.layer.borderColor = UIColor.lightGray.cgColor

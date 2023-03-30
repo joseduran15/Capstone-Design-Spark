@@ -144,7 +144,7 @@
                                         <fragment content="Deactivate">
                                             <attributes>
                                                 <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <font key="NSFont" size="15" name="Avenir-Medium"/>
+                                                <font key="NSFont" size="16" name="Avenir-Medium"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
@@ -156,10 +156,19 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3VO-gV-fJ1">
-                                <rect key="frame" x="15" y="43" width="87" height="35"/>
+                                <rect key="frame" x="17" y="43" width="86" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Settings"/>
+                                <buttonConfiguration key="configuration" style="filled">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Settings">
+                                            <attributes>
+                                                <font key="NSFont" size="17" name="Avenir-Book"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <color key="baseBackgroundColor" red="0.6340085741" green="0.39202506390000003" blue="0.34577168149999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <segue destination="jde-ui-UIY" kind="presentation" identifier="toSettings" modalPresentationStyle="fullScreen" id="4Eh-Mb-RHT"/>
                                 </connections>
@@ -345,6 +354,7 @@
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="18" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="4Kk-d6-gZm">
                                 <rect key="frame" x="73" y="201" width="254" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.7389253335" green="0.45689800250000001" blue="0.40299053600000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <connections>
                                     <action selector="maxSliderVal:" destination="kMW-EQ-Zrj" eventType="valueChanged" id="zuj-oF-f7Q"/>
                                 </connections>
@@ -352,6 +362,7 @@
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="18" minValue="18" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="agu-RF-FSK">
                                 <rect key="frame" x="73" y="97" width="252" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.7389253335" green="0.45689800250000001" blue="0.40299053600000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <connections>
                                     <action selector="minSliderVal:" destination="kMW-EQ-Zrj" eventType="valueChanged" id="N2j-bi-aMh"/>
                                 </connections>
@@ -650,7 +661,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="db1-D9-10g"/>
+        <segue reference="hF4-RJ-yWB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="labelColor">
