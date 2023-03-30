@@ -19,8 +19,6 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
 {
     var ref: DatabaseReference!
     let storage = Storage.storage()
-    var latData1 = 0.0
-    var longData1 = 0.0
     
     var currDisplayed = ""
     var currDisplayedName = ""
@@ -33,12 +31,13 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     
     var appUsers: [String] = []
     
+    //labels
+    let nameLabel = UILabel(frame: CGRect(x: 16, y: 379, width: 358, height: 81))
+    let ageGenLabel = UILabel(frame: CGRect(x: 43, y: 468, width: 308, height: 70))
+    let descripLabel = UILabel(frame: CGRect(x: 16, y: 546, width: 358, height: 155))
+    
     @IBOutlet weak var imageDisplay: UIImageView!
     
-    
-    /*ideas for how to get compatible users from database
-    - use the index grouping method from the firebase website: same level as users there's a gender and then an orientation and people's usernames are stored in their respective gender/orientation, and this could be expanded for interests too, then when looking for a potential match you look in the gender/orientation group https://firebase.google.com/docs/database/ios/structure-data#fanout
-    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,12 +53,25 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         userObserver(completion: {message in
             self.displayNextUser()
         })
+        createLabels()
         
     }
     
-    @IBOutlet weak var display: UILabel!
-    
-    @IBOutlet weak var displayOtherInfo: UILabel!
+    func createLabels()
+    {
+        
+        nameLabel.text = "Nothing yet"
+        nameLabel.myLabel()
+        nameLabel.font = UIFont(name: "Avenir-Black", size: 31)
+        view.addSubview(nameLabel)
+        ageGenLabel.text = "Nothing yet"
+        ageGenLabel.myLabel()
+        view.addSubview(ageGenLabel)
+        descripLabel.text = "Nothing yet"
+        descripLabel.myLabel()
+        descripLabel.numberOfLines = 4
+        view.addSubview(descripLabel)
+    }
     
     func displayNextUser(){
         
@@ -83,21 +95,17 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 //turning datasnapshot returned from database into a dictionary
                 a = snapshot.value as! Dictionary<String, Any>
                 //assigning values from the dictionary to variables so we don't have to type all the necessary error stuff every time
-                self.latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
-                self.longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
-                
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
                 var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
                 var otherAge = (a["ageData"] as? [String:Any])?["age"] as? String ?? "error"
                 var otherName = a["name"]
                 var otherBio = a["bio"]
+                var drink = a["drinkData"] as? [String]
                 self.currDisplayedName = otherName as! String
-                //calculate distance between this user and other
-                var distance = ViewController.GlobalLoc.distanceCalc(lat1: self.latData1, long1: self.longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
-                //checks if the distance is less than 2 miles
                 
-                self.display.text = otherName as? String
-                self.displayOtherInfo.text = "\(otherAge) years old \n\(otherGen)\n\(otherBio)"
+                self.nameLabel.text = otherName as? String
+                self.ageGenLabel.text = "\(otherAge) years old \n\(otherGen)\n"
+                self.descripLabel.text = "\(otherBio ?? "no bio")\nideas for a drink to buy me: \(drink![0])"
                 
                 //display other user's selfie
                 let storageRef = self.storage.reference()
@@ -120,8 +128,9 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         }
         else
         {
-            display.text = "No more users to display."
-            displayOtherInfo.text = ""
+            nameLabel.text = "No more users to display."
+            ageGenLabel.text = ""
+            descripLabel.text = ""
             imageDisplay.image = nil
             
         }
@@ -137,7 +146,6 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         ref.updateChildValues(liked)
         //check other user's "liked list"
         showUserMatch(completion: { message in
-            print("screams")
             if(message == "TRUE")
             {
                 let alert = UIAlertController(title: "It's a match!", message: "Now you can message this person!", preferredStyle: .alert)
@@ -146,7 +154,6 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                     
                 }))
                 self.present(alert, animated: true, completion: nil)
-                //messaging between you and your new match would be enabled here
             }
             self.displayNextUser()
         })
@@ -200,19 +207,27 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             a = snapshot.value as! Dictionary<String, Any>
             var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
             var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+            var latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
+            var longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
             var otherName = a["name"] as! String
-            if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
+            //calculate distance between this user and other
+            var distance = ViewController.GlobalLoc.distanceCalc(lat1: latData1, long1: longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
+            //checks if the distance is less than 2 miles
+            if(distance <= 1)
             {
-                
-                if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
+                if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
                 {
                     
-                    if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
-                        self.appUsers.append(snapshot.key)
-                        print(snapshot.key)
-                        completion("DONE")
+                    if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
+                    {
+                        
+                        if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
+                            self.appUsers.append(snapshot.key)
+                            print(snapshot.key)
+                            completion("DONE")
+                        }
+                        
                     }
-                    
                 }
             }
         })
@@ -232,5 +247,16 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
 
     
     
+}
+extension UILabel {
+    func myLabel() {
+        textAlignment = .center
+        textColor = .black
+        backgroundColor = .clear
+        font = UIFont(name: "Avenir", size: 21)
+        numberOfLines = 2
+        lineBreakMode = .byCharWrapping
+        //sizeToFit()
+    }
 }
 

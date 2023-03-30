@@ -164,6 +164,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         
     }
     
+    @IBAction func deactivateForTesting(_ sender: Any) {
+        AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()
+        locationManager.stopUpdatingLocation()
+        UserDefaults.standard.set(false, forKey: "LOADED")
+        transButton.isEnabled = true
+        let alert = UIAlertController(title: "You do not have a profile", message: "Please create a profile to continue using the app", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "To Profile Creation", style: .default, handler: { action in
+            self.transButton.sendActions(for: .touchUpInside)
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+        print("ran")
+    }
+    
+    
     @IBAction func clearCoreData(_ sender: Any) {
         
         AppDelegate.sharedAppDelegate.coreDataStack.clearDatabase()

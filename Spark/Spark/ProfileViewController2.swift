@@ -42,7 +42,7 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
         ref = Database.database().reference()
         bio.delegate = self
         
-        var things = ["vodka", "gin", "rum", "tequila", "amaretto", "whiskey", "bourbon","scotch", "baileys", "modelo", "corona", "IPA", "cranberry", "lemon", "lime", "orange", "grenadine", "soda", "coke", "pepsi", "sour", "on the rocks", "neat", "shot"]
+        var things = ["vodka", "gin", "rum", "tequila", "amaretto", "whiskey", "bourbon","scotch", "baileys", "modelo", "corona", "IPA", "cranberry", "lemon", "lime", "orange", "grenadine", "soda", "coke", "pepsi", "sour", "on the rocks", "shot", "peach", "not an alcohol fan!"]
         
         var drinkOptions: [UIButton] = []
         var theX = 0
@@ -71,14 +71,25 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
         bio.layer.borderWidth = 1.0
         bio.layer.cornerRadius = 8
         
+        
+
+
+        
     }
     
     @IBAction func minSliderVal(_ sender: UISlider) {
-        
+        if(sender.value > maxAge.value)
+        {
+            sender.value = maxAge.value
+        }
         minAgeLabel.text = String(Int(sender.value))
     }
     
     @IBAction func maxSliderVal(_ sender: UISlider) {
+        if(sender.value < minAge.value)
+        {
+            sender.value = minAge.value
+        }
         maxAgeLabel.text = String(Int(sender.value))
     }
     
@@ -130,8 +141,23 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
         ref.updateChildValues(ageUpperRange)
         ref = Database.database().reference().child("users").child(id).child("bio")
         ref.setValue(bio.text)
+        ref = Database.database().reference().child("users").child(id).child("drinkData")
+        ref.setValue(pressedButtons)
         
         
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+            if identifier == "mapScreenSegue" {
+                if(pressedButtons.count == 0)
+                {
+                    //create alert that says you must select a drink option
+                    return false
+                }
+                return true
+
+            }
+        return false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

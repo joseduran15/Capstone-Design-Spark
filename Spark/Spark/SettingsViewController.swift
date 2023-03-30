@@ -37,6 +37,7 @@ class SettingsViewController: UIViewController
         ref.observeSingleEvent(of: .value, with: { snapshot in
             self.bioLabel.text = snapshot.value as! String
         })
+        //add drink choice to profile view
     }
     
     override func viewDidAppear(_ animated: Bool)
