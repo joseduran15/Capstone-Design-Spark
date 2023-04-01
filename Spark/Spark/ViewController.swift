@@ -53,17 +53,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var haversine: UILabel!
     @IBOutlet weak var transButton: UIButton!
     
+    @IBOutlet weak var deactivateButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         //database setup
-        ref = Database.database().reference()
+        ref = Database.database().reference().child("users")
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(true)
-        //print(UserDefaults.standard.bool(forKey: "LOADED"))
         if (UserDefaults.standard.bool(forKey: "LOADED") == false)
         {
             var isEmpty: Bool {
@@ -131,6 +134,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         view.addSubview(contentView.view)
         contentView.didMove(toParent: self)
         
+        if let date = UserDefaults.standard.object(forKey: "TIMESTAMP") as? Date {
+            if let diff = Calendar.current.dateComponents([.hour], from: date, to: Date()).hour, diff > 24 {
+                self.deactivateButton.sendActions(for: .touchUpInside)
+            }
+        }
+        
         
     }
     
@@ -152,13 +161,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             self.me.name = a["name"] as? String ?? "error"
             self.me.ageUpperRange = (a["ageData"] as? [String:Any])?["ageUpperRange"] as? Int ?? -5
             self.me.ageLowerRange = (a["ageData"] as? [String:Any])?["ageLowerRange"] as? Int ?? -5
-            UserDefaults.standard.set(self.me.name, forKey: "NAME")
-            UserDefaults.standard.set(self.me.age, forKey: "AGE")
-            UserDefaults.standard.set(self.me.gender, forKey: "GENDER")
-            UserDefaults.standard.set(self.me.orientation, forKey: "ORIENTATION")
-            UserDefaults.standard.set(self.me.id, forKey: "UID")
-            
-            
             completion("DONE")
         });
         
@@ -188,7 +190,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
             
             if(snapshot.exists())
             {
+                
                 //need to get a list of everyone you've matched with, go through that list and remove you from their matched list and then delete their conversatoin with you if there is one
+                var a: [String: Any] = [:]
+                a = snapshot.value as! Dictionary<String, Any>
+                a.keys.forEach {id in
+                    let ref2 = Database.database().reference().child("users").child(id).child("matched").child(self.me.id!)
+                    ref2.removeValue()
+                    let ref3 = Database.database().reference().child("users").child(id).child("conversations").child(self.me.id!)
+                    ref3.removeValue()
+                }
             }
         })
         //then take your userid and use it to delete your selfie from firestore
@@ -211,8 +222,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
                 }
             })
         //this would remove your branch - this will happen last
-        //ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
-        //ref.removeValue()
+        ref = Database.database().reference().child("users").child(me.id ?? "that's bad")
+        ref.removeValue()
         //stop location manager
         locationManager.stopUpdatingLocation()
         UserDefaults.standard.set(false, forKey: "LOADED")

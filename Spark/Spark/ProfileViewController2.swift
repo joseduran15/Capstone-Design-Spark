@@ -165,6 +165,8 @@ class ProfileViewController2: UIViewController, UITextViewDelegate
             if let nextVC = segue.destination as? ViewController
             {
                 moreDataIntoDatabase()
+                UserDefaults.standard.set(Date(), forKey: "TIMESTAMP")
+                print(UserDefaults.standard.object(forKey: "TIMESTAMP"))
                 nextVC.me.name = name
                 nextVC.me.age = age
                 nextVC.me.gender = gender

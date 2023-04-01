@@ -226,6 +226,7 @@ class ProfileViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
         var childCounter: [String: Any] = [:]
         childCounter["childCount"] = self.userCount + 1
         reference.updateChildValues(childCounter)
+        //putting timestamp into database
     }
     
     func childObserver()

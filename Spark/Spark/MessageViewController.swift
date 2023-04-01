@@ -128,6 +128,12 @@ class MessageViewController:  UIViewController, UITableViewDataSource,  UITableV
                 //FIX THIS FOR FINALLL DEMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
             }
         }
+        if segue.identifier == "backButton" {
+            if let destinationVC = segue.destination as? ViewController {
+                destinationVC.me = me
+            }
+        }
+        
     }
     /*func grabUser(completion: @escaping (_ message: String) -> Void)
      {

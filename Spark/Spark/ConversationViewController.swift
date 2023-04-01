@@ -224,6 +224,4 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
         cell.textLabel?.text = self.data[indexPath.row]
         return cell
     }
-    
-    }
-
+}

@@ -41,8 +41,6 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(ViewController.GlobalLoc.myLat)
-        print(ViewController.GlobalLoc.myLong)
         ref = Database.database().reference()
         
     }
@@ -50,10 +48,16 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(true)
+        /*makeMatchedList(completion: {message in
+            print(self.matched)
+        })*/
         userObserver(completion: {message in
             self.displayNextUser()
         })
         createLabels()
+        
+        
+        
         
     }
     
@@ -76,7 +80,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     func displayNextUser(){
         
         print("appUsers count: \(appUsers.count)")
-        if(liked.count + unLiked.count != appUsers.count)
+        if(liked.count + unLiked.count != appUsers.count || appUsers.count == 0)
         {
             var next = Int.random(in: 0..<appUsers.count)
             while(unLiked.contains(appUsers[next]) || liked.contains(appUsers[next]))
@@ -198,6 +202,29 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
         
     }
     
+    /*func makeMatchedList(completion: @escaping (_ message: String) -> Void)
+    {
+        print("method started")
+        ref = Database.database().reference().child("users").child(me.id!).child("matched")
+        ref.observeSingleEvent(of: .value, with: {snapshot in
+            
+            if (snapshot.exists())
+            {
+                print("inside snapshot exists")
+                var a: [String: Any] = [:]
+                //turning datasnapshot returned from database into a dictionary
+                a = snapshot.value as! Dictionary<String, Any>
+                a.keys.forEach {id in
+                    self.matched.append(id)
+                    print(id)
+                }
+                
+            }
+            print("completion block")
+            completion("DONE")
+        })
+    }*/
+    
     func userObserver(completion: @escaping (_ message: String) -> Void)
     {
         ref.child("users").observe(DataEventType.childAdded, with: { snapshot in
@@ -205,34 +232,34 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             var a: [String: Any] = [:]
             //turning datasnapshot returned from database into a dictionary
             a = snapshot.value as! Dictionary<String, Any>
-            var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
-            var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
-            var latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
-            var longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
-            var otherName = a["name"] as! String
-            //calculate distance between this user and other
-            var distance = ViewController.GlobalLoc.distanceCalc(lat1: latData1, long1: longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
-            //checks if the distance is less than 2 miles
-            if(distance <= 1)
+            print(snapshot.key)
+            if(a["name"] != nil)
             {
-                if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
+                var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
+                var otherOrien = (a["gendData"] as? [String:Any])?["orientation"] as? String ?? "error"
+                var latData1 = (a["locData"] as? [String:Any])?["lat"] as? Double ?? -1
+                var longData1 = (a["locData"] as? [String:Any])?["long"] as? Double ?? -1
+                var otherName = a["name"] as! String
+                //calculate distance between this user and other
+                var distance = ViewController.GlobalLoc.distanceCalc(lat1: latData1, long1: longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
+                //checks if the distance is less than 2 miles
+                if(distance <= 1)
                 {
-                    
-                    if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
+                    if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
                     {
                         
-                        if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
-                            self.appUsers.append(snapshot.key)
-                            print(snapshot.key)
-                            completion("DONE")
+                        if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
+                        {
+                            
+                            if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
+                                self.appUsers.append(snapshot.key)
+                                completion("DONE")
+                            }
                         }
-                        
                     }
                 }
             }
         })
-        
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
