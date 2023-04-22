@@ -17,12 +17,18 @@ import FirebaseStorage
 import SwiftUI
 import AVFoundation
 
+struct ChatMessage {
+    let text: String
+    var isIncoming: Bool
+}
+
 class ConversationViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource,  UITableViewDelegate {
 
-    var data = ["", "", "", "", "", "", "", "", "", "", ""]
+    var data = ["From Spark: Hey! You can now chat with your match<3", "", "", "", "", "", "", "", "", "", ""]
     
     var i = 0
     
+    private var timer: Timer?
     var ref: DatabaseReference!
     var currDisplayed = ""
     var currDisplayedName = ""
@@ -44,13 +50,23 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
         override func viewDidLoad() {
             super.viewDidLoad()
             
-
+            
+            timer?.invalidate()
+            
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: true){_ in
+                let _ = self.textTable.reloadData()
+            }
+            
+            
             nameOfPerson.text = myString
             
             textTable.delegate = self
             textTable.dataSource = self
             
-            textTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+           // textTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+            textTable.register(ChatMessageCell.self, forCellReuseIdentifier: "cell")
+            textTable.separatorStyle = .none
+            textTable.backgroundColor = UIColor(white: 0.95, alpha: 1)
             
             //CREATE CONVO DICTIONARY
         
@@ -126,9 +142,6 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
                 
             })
             
-            
-        
-            
             // Add tap gesture recognizer to the view to dismiss keyboard when tapped
                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
                view.addGestureRecognizer(tapGesture)
@@ -138,24 +151,9 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
             
         }
     
-    
-    @IBAction func refresh(_ sender: Any) {
-        self.textTable.reloadData()
-    }
-    
         @IBAction func sendButtonPressed(_ sender: Any) {
             // Add the message to the data source
-          //  if let newMessage = inputField.text {
-              //  messages.append(newMessage)
-                
-                // Reload the collection view
-                print("testing testing")
-                print( nameOfPerson.text!)
-                print(myString!)
-                print("you pressed it and said")
-                print(inputField.text)
-                
-            // get first index not filled
+       
             var firstIndex = 0
             for i in data{
                 if (i == "")
@@ -165,43 +163,33 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
                 firstIndex += 1
             }
             
+            var newString = "\(me.id ?? "error") \(inputField.text ?? "error" )"
                 //update the dictionary
             
             var ref1 = Database.database().reference().child("users").child(self.me.id!).child("conversations").child(self.theID!).child(String(firstIndex))
-            ref1.setValue(inputField.text)
+            ref1.setValue(newString)
             
             
             var ref2 = Database.database().reference().child("users").child(self.theID!).child("conversations").child(self.me.id!).child(String(firstIndex))
-            ref2.setValue(inputField.text)
+            ref2.setValue(newString)
                 //upload inputField.text to created dictionary
             inputField.text = ""
                 self.textTable.reloadData()
             
         }
         
-        
-        
-        
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder() // Dismiss the keyboard when the user taps "Return"
         print(inputField.text)
         //self.data[1] = inputField.text!
-        for i in 0...8
+       /* for i in 0...8
         {
             if(data[i] == "")
             {
                 self.data[i] = inputField.text!
                 break
             }
-        }
-        
-        /*while( data[i] == "" && i <= 9)
-            {
-                self.data[i] = inputField.text!
-                i = i + 1
-            }*/
-        print(data)
-        print("done")
+        }*/
         return true
     }
     
@@ -219,9 +207,49 @@ class ConversationViewController: UIViewController, UITextFieldDelegate, UITable
     
    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ChatMessageCell
         print(self.data[indexPath.row])
-        cell.textLabel?.text = self.data[indexPath.row]
+       
+       if let index1 = self.data[indexPath.row].firstIndex(of: " ")
+       {
+           var index = String.Index(index1, within:self.data[indexPath.row])!
+           cell.messageLabel.text = self.data[indexPath.row].substring(from: index)
+           if(self.data[indexPath.row].contains(me.id!))
+           {
+               
+               var chatMessage = ChatMessage(text: self.data[indexPath.row].substring(from: index), isIncoming: false)
+               cell.chatMessage = chatMessage
+           }
+           else
+           {
+               //cell.messageLabel.textAlignment = .left
+               
+               var chatMessage = ChatMessage(text: self.data[indexPath.row].substring(from: index), isIncoming: true)
+               cell.chatMessage = chatMessage
+           }
+       }
+       else
+       {
+           
+           if(self.data[indexPath.row].contains(me.id!))
+           {
+               var chatMessage = ChatMessage(text: self.data[indexPath.row], isIncoming: false)
+               cell.chatMessage = chatMessage
+               //cell.bubbleBackgroundView.backgroundColor =  .darkGray
+           }
+           else
+           {
+               //cell.messageLabel.textAlignment = .left
+               
+               var chatMessage = ChatMessage(text: self.data[indexPath.row], isIncoming: true)
+               cell.chatMessage = chatMessage
+           }
+       }
+       //var index = String.Index(index1, within:self.data[indexPath.row].utf16)
+      
+       
+        //get uid from data[indexPath.row] through splitting the string
+        //if my uid aligh right, else align left
         return cell
     }
 }

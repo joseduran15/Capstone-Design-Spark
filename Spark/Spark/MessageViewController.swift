@@ -23,14 +23,14 @@ class MessageViewController:  UIViewController, UITableViewDataSource,  UITableV
     
     @IBOutlet var myTable: UITableView!
     
+    private var timer: Timer?
     
     var ref: DatabaseReference!
     var currDisplayed = "1000"
     var currDisplayedName = ""
     var me = User()
-    //var data = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    var data = ["", "", "", "", ""]
     
+    var data = ["", "", "", "", ""]
     var data2 = ["", "", "", "", ""]
     
     //var matchIds = []
@@ -70,12 +70,13 @@ class MessageViewController:  UIViewController, UITableViewDataSource,  UITableV
                 print(error.localizedDescription)
             }
         
-        self.myTable.reloadData()
+        timer?.invalidate()
+        
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: true){_ in
+            let _ = self.myTable.reloadData()
+        }
         
         }
-    
-    
-    
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -111,11 +112,7 @@ class MessageViewController:  UIViewController, UITableViewDataSource,  UITableV
         performSegue(withIdentifier: "showConvo", sender: self)
     }
     
-    @IBAction func sendButtonPressed(_ sender: Any) {
-        // Add the message to the data source
-            self.myTable.reloadData()
-        }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showConvo" {
             if let destinationVC = segue.destination as? ConversationViewController {
@@ -135,17 +132,6 @@ class MessageViewController:  UIViewController, UITableViewDataSource,  UITableV
         }
         
     }
-    /*func grabUser(completion: @escaping (_ message: String) -> Void)
-     {
-     ref = Database.database().reference().child("users").child(id of whichever user they clicked on).child("locData")
-     // ref.observeSingleEvent(of: .value, with: {snapshot in}
-     
-     if (snapshot.exists())
-     {}
-     
-     
-     }
-     }*/
-    
+  
 }
 

@@ -80,7 +80,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
     func displayNextUser(){
         
         print("appUsers count: \(appUsers.count)")
-        if(liked.count + unLiked.count != appUsers.count || appUsers.count == 0)
+        if(liked.count + unLiked.count != appUsers.count)
         {
             var next = Int.random(in: 0..<appUsers.count)
             while(unLiked.contains(appUsers[next]) || liked.contains(appUsers[next]))
@@ -92,6 +92,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                     appUsers.remove(at: index)
                 }*/
             }
+            imageDisplay.image = nil
             currDisplayed = appUsers[next]
             ref = Database.database().reference().child("users").child(appUsers[next])
             ref.observeSingleEvent(of: .value, with: { snapshot in
@@ -109,7 +110,15 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 
                 self.nameLabel.text = otherName as? String
                 self.ageGenLabel.text = "\(otherAge) years old \n\(otherGen)\n"
-                self.descripLabel.text = "\(otherBio ?? "no bio")\nideas for a drink to buy me: \(drink![0])"
+               // self.descripLabel.text = "\(otherBio ?? "no bio")\nideas for a drink to buy me: \(drink![0])"
+                self.descripLabel.text = "\(otherBio ?? "no bio")\nideas for a drink to buy me: "
+                if(drink != nil){
+                    for x in drink!
+                    {
+                        self.descripLabel.text! += x
+                        self.descripLabel.text! += " "
+                    }
+                }
                 
                 //display other user's selfie
                 let storageRef = self.storage.reference()
@@ -233,6 +242,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
             //turning datasnapshot returned from database into a dictionary
             a = snapshot.value as! Dictionary<String, Any>
             print(snapshot.key)
+            print("hello")
             if(a["name"] != nil)
             {
                 var otherGen = (a["gendData"] as? [String:Any])?["gender"] as? String ?? "error"
@@ -243,16 +253,21 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
                 //calculate distance between this user and other
                 var distance = ViewController.GlobalLoc.distanceCalc(lat1: latData1, long1: longData1, lat2: ViewController.GlobalLoc.myLat, long2: ViewController.GlobalLoc.myLong)
                 //checks if the distance is less than 2 miles
-                if(distance <= 1)
+                if(distance <= 5)
                 {
+                    print("distance")
                     if(self.me.orientation == "All" || self.me.orientation == otherGen || otherGen == "Nonbinary")
                     {
+                        print("orientation")
                         
                         if(otherOrien == "All" || otherOrien == self.me.gender || self.me.gender == "Nonbinary")
                         {
+                            print("gender")
                             
                             if(snapshot.key != self.me.id && snapshot.key.starts(with: "-")){
                                 self.appUsers.append(snapshot.key)
+                                print(self.appUsers)
+                                print("hiiiiiiiiiiiiiiiiiii")
                                 completion("DONE")
                             }
                         }
@@ -278,7 +293,7 @@ class MatchViewController: UIViewController, CLLocationManagerDelegate
 extension UILabel {
     func myLabel() {
         textAlignment = .center
-        textColor = .black
+        textColor = .white
         backgroundColor = .clear
         font = UIFont(name: "Avenir", size: 21)
         numberOfLines = 2
